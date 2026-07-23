@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 130 33% 99%;
+    --foreground: 155 20% 17%;
+    --card: 0 0% 100%;
+    --card-foreground: 155 20% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 155 20% 17%;
+    --primary: 160 84% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 30% 96%;
+    --secondary-foreground: 155 25% 25%;
+    --muted: 150 25% 95%;
+    --muted-foreground: 152 9% 42%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 145 18% 89%;
+    --input: 145 18% 88%;
+    --ring: 160 84% 36%;
+    --radius: 0.9rem;
+    --sidebar-background: 130 33% 99%;
+    --sidebar-foreground: 155 20% 17%;
+    --sidebar-primary: 160 84% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 150 30% 96%;
+    --sidebar-accent-foreground: 155 25% 25%;
+    --sidebar-border: 145 18% 89%;
+    --sidebar-ring: 160 84% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  code, pre, .font-mono {
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Monaco, Consolas,
+      "Liberation Mono", monospace;
+  }
+  ::selection {
+    background: rgba(52, 211, 153, 0.25);
+  }
+}
+
+@layer utilities {
+  /* 浅色细网格 */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(16, 185, 129, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.055) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+  /* 轻噪点 */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+  /* 清新渐变描边卡片 */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(52, 211, 153, 0.5),
+      rgba(56, 189, 248, 0.5) 55%,
+      rgba(52, 211, 153, 0.12)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .glow-cyan {
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  }
+  .glow-violet {
+    box-shadow: 0 8px 30px rgba(14, 165, 233, 0.14);
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, #059669 10%, #14b8a6 50%, #0284c7 90%);
+  }
+  .shadow-soft {
+    box-shadow: 0 4px 20px rgba(30, 64, 48, 0.06), 0 1px 4px rgba(30, 64, 48, 0.04);
+  }
+}
+
+/* 渐入动画 */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Agent Loop 动画 */
+@keyframes loop-dash {
+  to { stroke-dashoffset: -240; }
+}
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+.loop-path {
+  stroke-dasharray: 10 14;
+  animation: loop-dash 6s linear infinite;
+}
+.loop-node {
+  animation: node-pulse 2.4s ease-in-out infinite;
+}
+.loop-node:nth-of-type(2) { animation-delay: 0.6s; }
+.loop-node:nth-of-type(3) { animation-delay: 1.2s; }
+.loop-node:nth-of-type(4) { animation-delay: 1.8s; }
+
+@keyframes glow-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(3%, -3%) scale(1.08); }
+}
+.hero-orb {
+  animation: glow-drift 9s ease-in-out infinite;
+}
+
+/* ============ Markdown 正文排版（清新浅色） ============ */
+.md-body {
+  @apply text-[15px] leading-loose text-foreground/90;
+}
+.md-body h1 {
+  @apply mt-2 mb-6 text-2xl font-black tracking-tight text-foreground sm:text-3xl;
+}
+.md-body h2 {
+  @apply mt-12 mb-4 flex items-center gap-2.5 text-xl font-bold text-foreground;
+}
+.md-body h2::before {
+  content: "";
+  @apply inline-block h-5 w-1.5 rounded-full;
+  background: linear-gradient(180deg, #34d399, #38bdf8);
+}
+.md-body h3 {
+  @apply mt-8 mb-3 text-lg font-bold text-foreground;
+}
+.md-body h4 {
+  @apply mt-6 mb-2 text-base font-bold text-foreground;
+}
+.md-body p {
+  @apply my-4;
+}
+.md-body a {
+  @apply font-medium text-sky-600 underline decoration-sky-300 underline-offset-4 transition-colors hover:text-sky-700 hover:decoration-sky-500;
+}
+.md-body strong {
+  @apply font-bold text-foreground;
+}
+.md-body ul {
+  @apply my-4 list-disc space-y-2 pl-6 marker:text-emerald-400;
+}
+.md-body ol {
+  @apply my-4 list-decimal space-y-2 pl-6 marker:font-mono marker:text-emerald-500;
+}
+.md-body li > p {
+  @apply my-1;
+}
+.md-body blockquote {
+  @apply my-5 rounded-r-xl border-l-4 border-emerald-300 bg-emerald-50/70 px-5 py-3 text-foreground/80;
+}
+.md-body blockquote p {
+  @apply my-1.5;
+}
+.md-body hr {
+  @apply my-10 border-border;
+}
+.md-body code {
+  @apply rounded-md bg-[#eef3f0] px-1.5 py-0.5 font-mono text-[0.85em] text-emerald-700;
+}
+.md-body pre {
+  @apply my-5 overflow-x-auto rounded-xl border border-[#e3eae6] bg-[#f4f6f8] p-4 shadow-soft;
+}
+.md-body pre code {
+  @apply bg-transparent p-0 font-mono text-[13px] leading-relaxed text-slate-700;
+}
+.md-body table {
+  @apply my-6 w-full overflow-hidden rounded-xl border border-border text-sm;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.md-body thead th {
+  @apply border-b border-border bg-emerald-50/80 px-4 py-2.5 text-left font-bold text-emerald-900;
+}
+.md-body tbody td {
+  @apply border-b border-border/70 px-4 py-2.5 align-top;
+}
+.md-body tbody tr:last-child td {
+  @apply border-b-0;
+}
+.md-body tbody tr:nth-child(even) {
+  @apply bg-[#f7faf8];
+}
+.md-body img {
+  @apply mx-auto my-6 w-full max-w-3xl rounded-2xl border border-border bg-white p-3 shadow-soft;
+}
