@@ -11,7 +11,7 @@ const channels = [
   },
   {
     src: "./qrcode-channels.png",
-    alt: "视频号二维码",
+    alt: "视频号二维码：建斌聊AI",
     icon: Video,
     label: "视频号 · 建斌聊AI",
     desc: "AI Agent 源码拆解短视频",

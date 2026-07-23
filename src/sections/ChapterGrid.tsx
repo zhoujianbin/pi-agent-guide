@@ -21,7 +21,7 @@ export function ChapterGrid() {
           {chapters.map((ch, i) => (
             <Link
               key={ch.id}
-              to={`/chapter/${ch.id}`}
+              to={`/chapter/${ch.id}/`}
               className="gradient-border reveal group flex flex-col p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:glow-violet"
               style={{ animationDelay: `${(i % 3) * 0.08}s` }}
             >

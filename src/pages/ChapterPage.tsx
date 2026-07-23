@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Link, useParams, useNavigate, Navigate } from "react-router";
 import { getChapter, chapters } from "@/lib/chapters";
 import { renderMarkdown } from "@/lib/markdown";
+import { applyPageMeta, chapterTitle, HOME_TITLE, HOME_DESCRIPTION } from "@/lib/seo";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { QaBubble } from "@/components/QaBubble";
@@ -40,13 +41,23 @@ export default function ChapterPage() {
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    if (chapter) document.title = `第${chapter.id}章 · ${chapter.title} | PI agent学习指南`;
+    if (chapter) {
+      applyPageMeta({
+        title: chapterTitle(chapter.id, chapter.title),
+        description: chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`,
+        path: `/chapter/${chapter.id}/`,
+      });
+    }
     return () => {
-      document.title = "PI agent学习指南";
+      applyPageMeta({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" });
     };
   }, [chapter]);
 
   if (!chapter) return <Navigate to="/" replace />;
+  // URL 规范化：统一为尾部斜杠形式（与 canonical / sitemap 一致，线上 nginx 也是 301 到带斜杠）
+  if (!window.location.pathname.endsWith("/")) {
+    return <Navigate to={`/chapter/${chapter.id}/`} replace />;
+  }
 
   const prev = chapters.find((c) => c.id === chapter.id - 1);
   const next = chapters.find((c) => c.id === chapter.id + 1);
@@ -73,7 +84,7 @@ export default function ChapterPage() {
         {/* 顶部快捷章导航 */}
         <nav className="mt-4 flex items-center gap-2">
           {prev ? (
-            <Link to={`/chapter/${prev.id}`} className={navBtn}>
+            <Link to={`/chapter/${prev.id}/`} className={navBtn}>
               <ArrowLeft size={13} />
               上一章
             </Link>
@@ -98,7 +109,7 @@ export default function ChapterPage() {
             章节目录
           </a>
           {next ? (
-            <Link to={`/chapter/${next.id}`} className={navBtn}>
+            <Link to={`/chapter/${next.id}/`} className={navBtn}>
               下一章
               <ArrowRight size={13} />
             </Link>
@@ -187,7 +198,7 @@ export default function ChapterPage() {
         <nav className="mt-16 grid gap-4 border-t border-border/70 pt-10 sm:grid-cols-2">
           {prev ? (
             <Link
-              to={`/chapter/${prev.id}`}
+              to={`/chapter/${prev.id}/`}
               className="gradient-border group p-5 shadow-soft transition-transform duration-300 hover:-translate-y-1"
             >
               <p className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
@@ -202,7 +213,7 @@ export default function ChapterPage() {
           )}
           {next ? (
             <Link
-              to={`/chapter/${next.id}`}
+              to={`/chapter/${next.id}/`}
               className="gradient-border group p-5 text-right shadow-soft transition-transform duration-300 hover:-translate-y-1"
             >
               <p className="flex items-center justify-end gap-1.5 font-mono text-xs text-muted-foreground">
