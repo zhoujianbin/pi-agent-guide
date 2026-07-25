@@ -29,7 +29,10 @@ export interface PageMeta {
   path: string;
 }
 
-/** 切换路由时更新 title / description / canonical / og:url */
+/** 首次 applyPageMeta 调用（页面首载）不手动上报，避免与百度统计自动计数重复 */
+let firstMetaApplied = false;
+
+/** 切换路由时更新 title / description / canonical / og:url，并上报百度统计 SPA 页面浏览 */
 export function applyPageMeta({ title, description, path }: PageMeta): void {
   const url = path === "/" ? `${SITE_URL}/` : `${SITE_URL}${path}`;
   document.title = title;
@@ -40,6 +43,12 @@ export function applyPageMeta({ title, description, path }: PageMeta): void {
   setMetaContent('meta[name="twitter:title"]', title);
   setMetaContent('meta[name="twitter:description"]', description);
   setCanonical(url);
+  // SPA 前端路由切换时手动补记 PV（百度统计默认只记页面首次加载；首次挂载跳过避免重复计数）
+  const w = window as unknown as { _hmt?: { push: (args: string[]) => void } };
+  if (w._hmt) {
+    if (firstMetaApplied) w._hmt.push(["_trackPageview", path]);
+    firstMetaApplied = true;
+  }
 }
 
 export function chapterTitle(id: number, title: string): string {
