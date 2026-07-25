@@ -8,6 +8,14 @@
 
 已部署的完整站点，全站预渲染静态 HTML，打开即读，支持手机端。
 
+## 📸 站点预览
+
+[![首页：PI agent 学习指南](docs/screenshots/home-hero.jpg)](https://pistudy.com.cn)
+
+[![十章指南卡片](docs/screenshots/home-chapters.png)](https://pistudy.com.cn)
+
+[![章节页：带着问题读 + 面试问答](docs/screenshots/chapter-page.jpg)](https://pistudy.com.cn/chapter/1/)
+
 ## 功能亮点
 
 - **十章指南**：从三层架构到 Agent Loop、模型调用、工具系统、消息系统、事件驱动、上下文工程、压缩算法、会话管理，逐层拆透
