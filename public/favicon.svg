@@ -6,5 +6,6 @@
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <text x="32" y="45" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="bold" fill="#ffffff" text-anchor="middle">π</text>
+  <text x="32" y="29" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">PI</text>
+  <text x="32" y="47" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">agent</text>
 </svg>
