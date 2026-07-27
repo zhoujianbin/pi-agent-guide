@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X, Terminal, Github } from "lucide-react";
+
+export const GITHUB_URL = "https://github.com/zhoujianbin/pi-agent-guide";
 
 const links = [
   { href: "/#why", label: "为什么学" },
@@ -65,6 +67,16 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub 项目仓库"
+            className="flex items-center gap-1.5 rounded-full border border-border/70 px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-emerald-300 hover:text-emerald-600"
+          >
+            <Github size={15} />
+            GitHub
+          </a>
         </div>
 
         <button
@@ -89,6 +101,15 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm text-muted-foreground hover:bg-secondary hover:text-emerald-600"
+            >
+              <Github size={15} />
+              GitHub 项目仓库
+            </a>
           </div>
         </div>
       )}
