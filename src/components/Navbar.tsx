@@ -8,6 +8,7 @@ const links = [
   { href: "/#why", label: "为什么学" },
   { href: "/#path", label: "学习路径" },
   { href: "/#chapters", label: "十章指南" },
+  { href: "/questions/", label: "面试30题" },
   { href: "/#about", label: "关于 Pi" },
   { href: "/#follow", label: "关注我" },
 ];
@@ -27,6 +28,12 @@ export function Navbar() {
   const go = (href: string) => (e: React.MouseEvent) => {
     e.preventDefault();
     setOpen(false);
+    // 独立路由（无 # 锚点）：直接跳转
+    if (!href.includes("#")) {
+      navigate(href);
+      window.scrollTo({ top: 0 });
+      return;
+    }
     const [path, hash] = href.split("#");
     if (window.location.pathname !== path) {
       navigate(path);

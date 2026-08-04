@@ -28,6 +28,9 @@ const SITE_NAME = "PI agent学习指南";
 const HOME_TITLE = "PI agent学习指南 - 生产级 AI Agent 运行时中文实战教程";
 const HOME_DESCRIPTION =
   "《PI agent学习指南》——基于开源项目 Pi 源码逐行拆解的中文实战教程：十章读懂生产级 AI Agent 运行时，覆盖 Agent Loop、工具管道、上下文工程与会话树，每章附面试问答与架构图解。";
+const QUESTIONS_TITLE = "AI Agent 面试题：30 问 30 答（基于生产级源码）| PI agent学习指南";
+const QUESTIONS_DESCRIPTION =
+  "30 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法与会话树，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
 
 /* ---------- frontmatter 轻量解析（与 src/lib/chapters.ts 逻辑一致） ---------- */
 
@@ -154,6 +157,21 @@ function faqJsonLd(chapter) {
   };
 }
 
+/** 面试 30 题合集页：全站所有问答合并为一个 FAQPage */
+function questionsJsonLd(chapters) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: chapters.flatMap((chapter) =>
+      chapter.interview.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    ),
+  };
+}
+
 /* ---------- 静态服务器（dist + SPA fallback） ---------- */
 
 const MIME = {
@@ -217,37 +235,50 @@ async function main() {
   });
 
   const buildDate = new Date().toISOString().slice(0, 10);
-  const routes = ["/", ...chapters.map((c) => `/chapter/${c.id}/`)];
+  const routes = ["/", "/questions/", ...chapters.map((c) => `/chapter/${c.id}/`)];
 
   try {
     const page = await browser.newPage();
     for (const route of routes) {
       const isHome = route === "/";
-      const chapter = isHome ? null : chapters.find((c) => `/chapter/${c.id}/` === route);
+      const isQuestions = route === "/questions/";
+      const chapter = isHome || isQuestions ? null : chapters.find((c) => `/chapter/${c.id}/` === route);
       await page.goto(`http://127.0.0.1:${port}${route}`, {
         waitUntil: "networkidle0",
         timeout: 60000,
       });
-      // 等 React 把目标路由渲染出来：首页等 h1，章节页等正文容器 .md-body
-      // （首页快照写入 dist/index.html 后，静态 h1 会立即命中，故章节页必须等章节专属节点）
-      await page.waitForSelector(isHome ? "#root h1" : "#root .md-body", { timeout: 30000 });
+      // 等 React 把目标路由渲染出来：首页等 h1，合集页等 #questions-root，章节页等正文容器 .md-body
+      // （首页快照写入 dist/index.html 后，静态 h1 会立即命中，故子页面必须等各自专属节点）
+      const readySelector = isHome ? "#root h1" : isQuestions ? "#root #questions-root" : "#root .md-body";
+      await page.waitForSelector(readySelector, { timeout: 30000 });
       let html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
 
-      const title = isHome ? HOME_TITLE : `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`;
+      const title = isHome
+        ? HOME_TITLE
+        : isQuestions
+          ? QUESTIONS_TITLE
+          : `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`;
       const description = isHome
         ? HOME_DESCRIPTION
-        : chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`;
+        : isQuestions
+          ? QUESTIONS_DESCRIPTION
+          : chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`;
       const url = isHome ? `${SITE_URL}/` : `${SITE_URL}${route}`;
 
       html = applyHead(html, { title, description, url });
-      html = injectJsonLd(html, isHome ? websiteJsonLd() : faqJsonLd(chapter));
+      html = injectJsonLd(
+        html,
+        isHome ? websiteJsonLd() : isQuestions ? questionsJsonLd(chapters) : faqJsonLd(chapter),
+      );
 
       if (isHome) {
         await writeFile(path.join(DIST, "index.html"), html);
       } else {
-        // 子目录页面：相对资源路径改为绝对路径，避免 ./assets 解析到 /chapter/N/ 下
+        // 子目录页面：相对资源路径改为绝对路径，避免 ./assets 解析到子目录下
         html = html.replace(/(src|href)="\.\/assets\//g, '$1="/assets/');
-        const outDir = path.join(DIST, "chapter", String(chapter.id));
+        const outDir = isQuestions
+          ? path.join(DIST, "questions")
+          : path.join(DIST, "chapter", String(chapter.id));
         await mkdir(outDir, { recursive: true });
         await writeFile(path.join(outDir, "index.html"), html);
       }
@@ -261,6 +292,7 @@ async function main() {
   // sitemap：lastmod 用构建日期
   const urls = [
     `  <url><loc>${SITE_URL}/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
+    `  <url><loc>${SITE_URL}/questions/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     ...chapters.map(
       (c) =>
         `  <url><loc>${SITE_URL}/chapter/${c.id}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,

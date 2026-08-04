@@ -17,6 +17,24 @@ export function ChapterGrid() {
           </p>
         </div>
 
+        <Link
+          to="/questions/"
+          className="gradient-border reveal group mb-8 flex flex-col items-start gap-3 p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:glow-cyan sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div>
+            <p className="font-mono text-xs tracking-widest text-sky-600">INTERVIEW 30 Q&amp;A</p>
+            <h3 className="mt-2 text-lg font-bold text-foreground">
+              AI Agent 面试题：30 问 30 答合集
+            </h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">
+              十章的面试问答全部汇总在一页，自测、速查、面试前抱佛脚都好用。
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 text-sm font-bold text-white shadow-soft transition-transform group-hover:translate-x-1">
+            去自测 <ArrowRight size={14} />
+          </span>
+        </Link>
+
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {chapters.map((ch, i) => (
             <Link
