@@ -50,7 +50,19 @@ const filtered = await page.evaluate(() => document.body.innerText);
 if (filtered.includes("/compact [提示]") && !filtered.includes("/login, /logout")) ok("页内筛选生效（compact 命中，login 被过滤）");
 else fail("页内筛选异常");
 
-// 2. 全站搜索：⌘K 打开 → 输入 → 出结果 → Enter 跳转
+// 3. 生态精选页：静态渲染 + 筛选
+await page.goto(`http://127.0.0.1:${port}/ecosystem/`, { waitUntil: "networkidle0" });
+await page.waitForSelector("#ecosystem-root", { timeout: 15000 });
+const ecoText = await page.evaluate(() => document.body.innerText);
+if (ecoText.includes("pi-subagents") && ecoText.includes("pi install npm:") && ecoText.includes("多智能体")) ok("生态页静态渲染含包卡片与安装命令");
+else fail("生态页静态内容缺失");
+await page.type("#ecosystem-root input", "记忆");
+await new Promise((r) => setTimeout(r, 300));
+const ecoFiltered = await page.evaluate(() => document.body.innerText);
+if (ecoFiltered.includes("pi-hermes-memory") && !ecoFiltered.includes("pi-web-access")) ok("生态页筛选生效（记忆命中，联网被过滤）");
+else fail("生态页筛选异常");
+
+// 4. 全站搜索：⌘K 打开 → 输入 → 出结果 → Enter 跳转
 await page.goto(`http://127.0.0.1:${port}/`, { waitUntil: "networkidle0" });
 await page.keyboard.down("Meta");
 await page.keyboard.press("k");
@@ -72,7 +84,7 @@ const afterPath = new URL(page.url()).pathname;
 if (afterPath !== beforePath) ok(`Enter 跳转 ${beforePath} → ${afterPath}`);
 else fail("Enter 未跳转");
 
-// 3. 英文/命令关键词
+// 5. 英文/命令关键词
 await page.keyboard.down("Meta"); await page.keyboard.press("k"); await page.keyboard.up("Meta");
 await page.waitForSelector('[role="dialog"] input', { timeout: 5000 });
 await page.type('[role="dialog"] input', "fork");
@@ -80,6 +92,17 @@ await new Promise((r) => setTimeout(r, 300));
 const forkResults = await page.evaluate(() => document.querySelector('[role="dialog"]').innerText);
 if (forkResults.includes("/fork")) ok("搜索「fork」命中速查表 /fork 条目");
 else fail("fork 搜索异常");
+
+// 6. 生态条目进搜索索引（先 Esc 关掉上一轮的搜索框）
+await page.keyboard.press("Escape");
+await new Promise((r) => setTimeout(r, 300));
+await page.keyboard.down("Meta"); await page.keyboard.press("k"); await page.keyboard.up("Meta");
+await page.waitForSelector('[role="dialog"] input', { timeout: 5000 });
+await page.type('[role="dialog"] input', "pi-web-access");
+await new Promise((r) => setTimeout(r, 300));
+const ecoResults = await page.evaluate(() => document.querySelector('[role="dialog"]').innerText);
+if (ecoResults.includes("生态") && ecoResults.includes("pi-web-access")) ok("搜索「pi-web-access」命中生态精选条目");
+else fail("生态搜索异常");
 
 await browser.close();
 server.close();

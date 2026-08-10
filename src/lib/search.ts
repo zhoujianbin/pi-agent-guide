@@ -5,8 +5,9 @@
  */
 import { chapters } from "@/lib/chapters";
 import { flattenCheatsheet } from "@/lib/cheatsheet";
+import { flattenEcosystem } from "@/lib/ecosystem";
 
-export type SearchKind = "chapter" | "question" | "cheat";
+export type SearchKind = "chapter" | "question" | "cheat" | "eco";
 
 export interface SearchEntry {
   kind: SearchKind;
@@ -86,6 +87,16 @@ function buildIndex(): SearchEntry[] {
       crumb: `速查表 · ${item.group}`,
       text: `${item.key} ${item.desc}`.toLowerCase(),
       to: "/cheatsheet/",
+    });
+  }
+
+  for (const item of flattenEcosystem()) {
+    entries.push({
+      kind: "eco",
+      title: item.key,
+      crumb: item.group,
+      text: `${item.key} ${item.desc}`.toLowerCase(),
+      to: "/ecosystem/",
     });
   }
 

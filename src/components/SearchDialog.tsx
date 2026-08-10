@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
-import { Search, FileText, CircleHelp, SquareTerminal, CornerDownLeft } from "lucide-react";
+import { Search, FileText, CircleHelp, SquareTerminal, CornerDownLeft, Package } from "lucide-react";
 import { searchDocs, type SearchKind, type SearchResult } from "@/lib/search";
 
 const KIND_META: Record<SearchKind, { label: string; cls: string; icon: ReactNode }> = {
@@ -19,12 +19,18 @@ const KIND_META: Record<SearchKind, { label: string; cls: string; icon: ReactNod
     cls: "bg-amber-50 text-amber-700 border-amber-200/70",
     icon: <SquareTerminal size={11} />,
   },
+  eco: {
+    label: "生态",
+    cls: "bg-violet-50 text-violet-700 border-violet-200/70",
+    icon: <Package size={11} />,
+  },
 };
 
 const HOT_ENTRIES = [
   { to: "/#chapters", label: "十章指南目录", desc: "从三层架构到会话树，逐章拆解" },
   { to: "/questions/", label: "面试 30 题", desc: "30 问 30 答，读完自测" },
   { to: "/cheatsheet/", label: "命令速查表", desc: "斜杠命令 / CLI / 快捷键" },
+  { to: "/ecosystem/", label: "生态精选", desc: "值得装的社区扩展与技能包" },
 ];
 
 export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void }) {

@@ -11,6 +11,7 @@ const links = [
   { href: "/#chapters", label: "十章指南" },
   { href: "/questions/", label: "面试30题" },
   { href: "/cheatsheet/", label: "速查表" },
+  { href: "/ecosystem/", label: "生态精选" },
   { href: "/#about", label: "关于 Pi" },
   { href: "/#follow", label: "关注我" },
 ];
@@ -78,7 +79,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-7 md:flex">
+        <div className="hidden items-center gap-5 md:flex">
           {links.map((l) => (
             <a
               key={l.href}
