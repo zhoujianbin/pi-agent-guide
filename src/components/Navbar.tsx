@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Menu, X, Terminal, Github } from "lucide-react";
+import { Menu, X, Terminal, Github, Search } from "lucide-react";
+import { SearchDialog } from "@/components/SearchDialog";
 
 export const GITHUB_URL = "https://github.com/zhoujianbin/pi-agent-guide";
 
@@ -9,6 +10,7 @@ const links = [
   { href: "/#path", label: "学习路径" },
   { href: "/#chapters", label: "十章指南" },
   { href: "/questions/", label: "面试30题" },
+  { href: "/cheatsheet/", label: "速查表" },
   { href: "/#about", label: "关于 Pi" },
   { href: "/#follow", label: "关注我" },
 ];
@@ -16,6 +18,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +26,18 @@ export function Navbar() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // ⌘K / Ctrl+K 打开全站搜索
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   const go = (href: string) => (e: React.MouseEvent) => {
@@ -74,6 +89,17 @@ export function Navbar() {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="全站搜索"
+            className="flex items-center gap-1.5 rounded-full border border-border/70 px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-emerald-300 hover:text-emerald-600"
+          >
+            <Search size={14} />
+            搜索
+            <kbd className="rounded border border-border/70 bg-secondary/70 px-1 font-mono text-[10px] text-muted-foreground/70">
+              ⌘K
+            </kbd>
+          </button>
           <a
             href={GITHUB_URL}
             target="_blank"
@@ -98,6 +124,16 @@ export function Navbar() {
       {open && (
         <div className="border-t border-border/70 bg-white/95 backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-1 px-4 py-3">
+            <button
+              onClick={() => {
+                setOpen(false);
+                setSearchOpen(true);
+              }}
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm text-muted-foreground hover:bg-secondary hover:text-emerald-600"
+            >
+              <Search size={15} />
+              全站搜索
+            </button>
             {links.map((l) => (
               <a
                 key={l.href}
@@ -120,6 +156,7 @@ export function Navbar() {
           </div>
         </div>
       )}
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

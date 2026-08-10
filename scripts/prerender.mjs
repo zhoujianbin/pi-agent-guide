@@ -31,6 +31,9 @@ const HOME_DESCRIPTION =
 const QUESTIONS_TITLE = "AI Agent 面试题：30 问 30 答（基于生产级源码）| PI agent学习指南";
 const QUESTIONS_DESCRIPTION =
   "30 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法与会话树，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
+const CHEATSHEET_TITLE = "Pi 速查表：斜杠命令 / CLI 参数 / 快捷键一页全收录 | PI agent学习指南";
+const CHEATSHEET_DESCRIPTION =
+  "Pi coding agent 中文速查表：全部斜杠命令（会话分叉、压缩、导出分享）、CLI 参数（四种运行模式、工具白名单、模型切换）、编辑器技巧与默认快捷键，依据官方文档整理，支持页内筛选。";
 
 /* ---------- frontmatter 轻量解析（与 src/lib/chapters.ts 逻辑一致） ---------- */
 
@@ -172,6 +175,19 @@ function questionsJsonLd(chapters) {
   };
 }
 
+/** 速查表页：WebPage 标注 */
+function cheatsheetJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: CHEATSHEET_TITLE,
+    description: CHEATSHEET_DESCRIPTION,
+    url: `${SITE_URL}/cheatsheet/`,
+    inLanguage: "zh-CN",
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: SITE_URL },
+  };
+}
+
 /* ---------- 静态服务器（dist + SPA fallback） ---------- */
 
 const MIME = {
@@ -235,21 +251,31 @@ async function main() {
   });
 
   const buildDate = new Date().toISOString().slice(0, 10);
-  const routes = ["/", "/questions/", ...chapters.map((c) => `/chapter/${c.id}/`)];
+  const routes = ["/", "/questions/", "/cheatsheet/", ...chapters.map((c) => `/chapter/${c.id}/`)];
 
   try {
     const page = await browser.newPage();
     for (const route of routes) {
       const isHome = route === "/";
       const isQuestions = route === "/questions/";
-      const chapter = isHome || isQuestions ? null : chapters.find((c) => `/chapter/${c.id}/` === route);
+      const isCheatsheet = route === "/cheatsheet/";
+      const chapter =
+        isHome || isQuestions || isCheatsheet
+          ? null
+          : chapters.find((c) => `/chapter/${c.id}/` === route);
       await page.goto(`http://127.0.0.1:${port}${route}`, {
         waitUntil: "networkidle0",
         timeout: 60000,
       });
-      // 等 React 把目标路由渲染出来：首页等 h1，合集页等 #questions-root，章节页等正文容器 .md-body
+      // 等 React 把目标路由渲染出来：首页等 h1，合集页/速查表页等各等专属节点，章节页等正文容器 .md-body
       // （首页快照写入 dist/index.html 后，静态 h1 会立即命中，故子页面必须等各自专属节点）
-      const readySelector = isHome ? "#root h1" : isQuestions ? "#root #questions-root" : "#root .md-body";
+      const readySelector = isHome
+        ? "#root h1"
+        : isQuestions
+          ? "#root #questions-root"
+          : isCheatsheet
+            ? "#root #cheatsheet-root"
+            : "#root .md-body";
       await page.waitForSelector(readySelector, { timeout: 30000 });
       let html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
 
@@ -257,18 +283,28 @@ async function main() {
         ? HOME_TITLE
         : isQuestions
           ? QUESTIONS_TITLE
-          : `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`;
+          : isCheatsheet
+            ? CHEATSHEET_TITLE
+            : `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`;
       const description = isHome
         ? HOME_DESCRIPTION
         : isQuestions
           ? QUESTIONS_DESCRIPTION
-          : chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`;
+          : isCheatsheet
+            ? CHEATSHEET_DESCRIPTION
+            : chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`;
       const url = isHome ? `${SITE_URL}/` : `${SITE_URL}${route}`;
 
       html = applyHead(html, { title, description, url });
       html = injectJsonLd(
         html,
-        isHome ? websiteJsonLd() : isQuestions ? questionsJsonLd(chapters) : faqJsonLd(chapter),
+        isHome
+          ? websiteJsonLd()
+          : isQuestions
+            ? questionsJsonLd(chapters)
+            : isCheatsheet
+              ? cheatsheetJsonLd()
+              : faqJsonLd(chapter),
       );
 
       if (isHome) {
@@ -278,7 +314,9 @@ async function main() {
         html = html.replace(/(src|href)="\.\/assets\//g, '$1="/assets/');
         const outDir = isQuestions
           ? path.join(DIST, "questions")
-          : path.join(DIST, "chapter", String(chapter.id));
+          : isCheatsheet
+            ? path.join(DIST, "cheatsheet")
+            : path.join(DIST, "chapter", String(chapter.id));
         await mkdir(outDir, { recursive: true });
         await writeFile(path.join(outDir, "index.html"), html);
       }
@@ -293,6 +331,7 @@ async function main() {
   const urls = [
     `  <url><loc>${SITE_URL}/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
     `  <url><loc>${SITE_URL}/questions/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+    `  <url><loc>${SITE_URL}/cheatsheet/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     ...chapters.map(
       (c) =>
         `  <url><loc>${SITE_URL}/chapter/${c.id}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
