@@ -21,12 +21,13 @@
 - **十章指南**：从三层架构到 Agent Loop、模型调用、工具系统、消息系统、事件驱动、上下文工程、压缩算法、会话管理，逐层拆透
 - **每章 3 个面试问答气泡**：章首"带着问题读"，正文中对应段落右侧浮动"面试题 N"问答气泡，读完即可自测
 - **面试 30 题合集页**（`/questions/`）：十章问答汇总成一页速查，附展开阅读链接
+- **实战专栏**（`/lab/`）：动手做一个 mini Agent——零依赖纯 Node.js，5 关从裸 fetch 到工具循环、流式事件、上下文压缩、可交互 REPL，每关对照 Pi 源码
 - **命令速查表**（`/cheatsheet/`）：斜杠命令、CLI 参数、编辑器技巧、默认快捷键一页收录，支持页内筛选
 - **生态精选**（`/ecosystem/`）：从官方包注册表 5300+ 社区包中按品类精选，中文一句话简介 + 一行安装命令
-- **全站搜索**：导航栏搜索按钮或 `⌘K / Ctrl+K` 唤起，本地索引章节正文、面试问答、速查与生态条目，即时匹配
+- **全站搜索**：导航栏搜索按钮或 `⌘K / Ctrl+K` 唤起，本地索引章节正文、面试问答、速查、生态与实战条目，即时匹配
 - **28 张架构配图**：米白底 SVG 图解，嵌在章节正文对应位置
 - **清新响应式设计**：薄荷绿 × 天空蓝浅色主题，移动端单列自适应
-- **SEO 友好**：构建时预渲染 14 页静态 HTML，每页独立标题/描述/canonical，面试问答生成 FAQPage 结构化数据，自带 sitemap 与 robots
+- **SEO 友好**：构建时预渲染 20 页静态 HTML，每页独立标题/描述/canonical，面试问答生成 FAQPage 结构化数据，自带 sitemap 与 robots
 
 ## 技术栈
 
@@ -40,18 +41,19 @@
 ```bash
 npm install
 npm run dev      # 本地开发（默认 http://localhost:3000）
-npm run build    # 生产构建（tsc + vite build + 14 页预渲染静态 HTML，输出 dist/）
+npm run build    # 生产构建（tsc + vite build + 20 页预渲染静态 HTML，输出 dist/）
 ```
 
 ## 目录结构
 
 ```
 ├── content/chapters/      # 10 个章节 Markdown（YAML frontmatter + 正文）
+├── content/lab/           # 5 个实战关卡 Markdown（mini Agent 动手专栏）
 │                          #   frontmatter: chapter / title / subtitle / tags / interview(q,a)
 │                          #   正文用 [[qa:1]] [[qa:2]] [[qa:3]] 标记面试气泡插入位置
 ├── public/diagrams/       # 28 张章节配图（SVG）
 ├── public/qrcode-*.png    # 站点运营者个人二维码物料（见许可说明）
-├── scripts/prerender.mjs  # 构建后预渲染：14 页静态 HTML + 每页独立 meta/canonical + JSON-LD
+├── scripts/prerender.mjs  # 构建后预渲染：20 页静态 HTML + 每页独立 meta/canonical + JSON-LD
 ├── src/
 │   ├── lib/chapters.ts    # 章节加载 + frontmatter 解析（单一数据源）
 │   ├── lib/markdown.ts    # markdown-it 实例

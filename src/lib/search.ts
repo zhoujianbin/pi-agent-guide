@@ -6,8 +6,9 @@
 import { chapters } from "@/lib/chapters";
 import { flattenCheatsheet } from "@/lib/cheatsheet";
 import { flattenEcosystem } from "@/lib/ecosystem";
+import { labs } from "@/lib/lab";
 
-export type SearchKind = "chapter" | "question" | "cheat" | "eco";
+export type SearchKind = "chapter" | "question" | "cheat" | "eco" | "lab";
 
 export interface SearchEntry {
   kind: SearchKind;
@@ -98,6 +99,25 @@ function buildIndex(): SearchEntry[] {
       text: `${item.key} ${item.desc}`.toLowerCase(),
       to: "/ecosystem/",
     });
+  }
+
+  // 实战关卡：按小节切分，同章节处理
+  for (const lab of labs) {
+    const crumb = `实战第 ${lab.step} 关 · ${lab.title}`;
+    const blocks = lab.body.split(/^(#{2,3}\s+.+)$/m);
+    for (let i = 0; i < blocks.length; i++) {
+      if (/^#{2,3}\s+/.test(blocks[i])) continue;
+      const heading = i > 0 ? blocks[i - 1].replace(/^#{2,3}\s+/, "").trim() : lab.title;
+      const text = stripMarkdown(blocks[i]);
+      if (text.length < 20) continue;
+      entries.push({
+        kind: "lab",
+        title: heading,
+        crumb,
+        text: `${heading} ${text}`.toLowerCase(),
+        to: `/lab/${lab.step}/`,
+      });
+    }
   }
 
   return entries;

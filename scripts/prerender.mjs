@@ -37,6 +37,10 @@ const CHEATSHEET_DESCRIPTION =
 const ECOSYSTEM_TITLE = "Pi 生态精选：值得装的社区扩展与技能包 | PI agent学习指南";
 const ECOSYSTEM_DESCRIPTION =
   "从 Pi 官方包注册表（5300+ 社区包）精选的中文导购：子代理与工作流、记忆与上下文、计划协作、代码质量、安全权限、联网集成、技能方法论与可观测性，每个包附一句话简介与一行安装命令。";
+const LAB_TITLE = "动手做一个 mini Agent：5 关从零写出自己的 Agent | PI agent学习指南";
+const LAB_DESCRIPTION =
+  "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩，最后组装成可交互的 mini agent，每关对照 Pi 源码讲清原理。";
+const LAB_DIR = path.join(ROOT, "content", "lab");
 
 /* ---------- frontmatter 轻量解析（与 src/lib/chapters.ts 逻辑一致） ---------- */
 
@@ -103,6 +107,18 @@ async function loadChapters() {
     chapters.push(parseChapter(raw, i + 1));
   }
   return chapters.sort((a, b) => a.id - b.id);
+}
+
+/** 实战关卡：复用 parseChapter（frontmatter 用 step 字段，缺省按文件顺序编号） */
+async function loadLabs() {
+  const files = (await readdir(LAB_DIR)).filter((f) => /^lab\d+\.md$/.test(f)).sort();
+  const labs = [];
+  for (let i = 0; i < files.length; i++) {
+    const raw = await readFile(path.join(LAB_DIR, files[i]), "utf8");
+    const doc = parseChapter(raw, i + 1);
+    labs.push({ step: doc.id, title: doc.title, subtitle: doc.subtitle });
+  }
+  return labs.sort((a, b) => a.step - b.step);
 }
 
 /* ---------- head 重写与 JSON-LD 注入 ---------- */
@@ -246,6 +262,7 @@ function chromePath() {
 
 async function main() {
   const chapters = await loadChapters();
+  const labs = await loadLabs();
   const { server, port } = await serve(DIST);
   const browser = await puppeteer.launch({
     executablePath: chromePath(),
@@ -278,17 +295,30 @@ async function main() {
       outDir: "ecosystem",
       jsonLd: () => webpageJsonLd(ECOSYSTEM_TITLE, ECOSYSTEM_DESCRIPTION, "/ecosystem/"),
     },
+    "/lab/": {
+      title: LAB_TITLE,
+      description: LAB_DESCRIPTION,
+      ready: "#root #lab-root",
+      outDir: "lab",
+      jsonLd: () => webpageJsonLd(LAB_TITLE, LAB_DESCRIPTION, "/lab/"),
+    },
   };
 
-  const routes = ["/", ...Object.keys(staticPages), ...chapters.map((c) => `/chapter/${c.id}/`)];
+  const routes = [
+    "/",
+    ...Object.keys(staticPages),
+    ...chapters.map((c) => `/chapter/${c.id}/`),
+    ...labs.map((l) => `/lab/${l.step}/`),
+  ];
 
   try {
     const page = await browser.newPage();
     for (const route of routes) {
       const isHome = route === "/";
       const staticPage = staticPages[route] ?? null;
-      const chapter =
-        isHome || staticPage ? null : chapters.find((c) => `/chapter/${c.id}/` === route);
+      const chapter = isHome || staticPage ? null : chapters.find((c) => `/chapter/${c.id}/` === route);
+      const lab =
+        isHome || staticPage || chapter ? null : labs.find((l) => `/lab/${l.step}/` === route);
       await page.goto(`http://127.0.0.1:${port}${route}`, {
         waitUntil: "networkidle0",
         timeout: 60000,
@@ -303,18 +333,28 @@ async function main() {
         ? HOME_TITLE
         : staticPage
           ? staticPage.title
-          : `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`;
+          : chapter
+            ? `第${chapter.id}章 ${chapter.title} | ${SITE_NAME}`
+            : `实战第${lab.step}关 ${lab.title} | ${SITE_NAME}`;
       const description = isHome
         ? HOME_DESCRIPTION
         : staticPage
           ? staticPage.description
-          : chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`;
+          : chapter
+            ? chapter.subtitle || `${chapter.title}——《PI agent学习指南》第 ${chapter.id} 章，源码级拆解。`
+            : lab.subtitle || `动手做 mini Agent 第 ${lab.step} 关：${lab.title}`;
       const url = isHome ? `${SITE_URL}/` : `${SITE_URL}${route}`;
 
       html = applyHead(html, { title, description, url });
       html = injectJsonLd(
         html,
-        isHome ? websiteJsonLd() : staticPage ? staticPage.jsonLd() : faqJsonLd(chapter),
+        isHome
+          ? websiteJsonLd()
+          : staticPage
+            ? staticPage.jsonLd()
+            : chapter
+              ? faqJsonLd(chapter)
+              : webpageJsonLd(title, description, route),
       );
 
       if (isHome) {
@@ -324,7 +364,9 @@ async function main() {
         html = html.replace(/(src|href)="\.\/assets\//g, '$1="/assets/');
         const outDir = staticPage
           ? path.join(DIST, staticPage.outDir)
-          : path.join(DIST, "chapter", String(chapter.id));
+          : chapter
+            ? path.join(DIST, "chapter", String(chapter.id))
+            : path.join(DIST, "lab", String(lab.step));
         await mkdir(outDir, { recursive: true });
         await writeFile(path.join(outDir, "index.html"), html);
       }
@@ -341,9 +383,14 @@ async function main() {
     `  <url><loc>${SITE_URL}/questions/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/cheatsheet/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/ecosystem/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+    `  <url><loc>${SITE_URL}/lab/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     ...chapters.map(
       (c) =>
         `  <url><loc>${SITE_URL}/chapter/${c.id}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
+    ),
+    ...labs.map(
+      (l) =>
+        `  <url><loc>${SITE_URL}/lab/${l.step}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
     ),
   ];
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;

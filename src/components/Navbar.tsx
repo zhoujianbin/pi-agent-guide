@@ -6,13 +6,12 @@ import { SearchDialog } from "@/components/SearchDialog";
 export const GITHUB_URL = "https://github.com/zhoujianbin/pi-agent-guide";
 
 const links = [
-  { href: "/#why", label: "为什么学" },
   { href: "/#path", label: "学习路径" },
   { href: "/#chapters", label: "十章指南" },
+  { href: "/lab/", label: "实战" },
   { href: "/questions/", label: "面试30题" },
   { href: "/cheatsheet/", label: "速查表" },
   { href: "/ecosystem/", label: "生态精选" },
-  { href: "/#about", label: "关于 Pi" },
   { href: "/#follow", label: "关注我" },
 ];
 

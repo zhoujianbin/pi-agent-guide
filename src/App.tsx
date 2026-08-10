@@ -4,6 +4,8 @@ import ChapterPage from './pages/ChapterPage'
 import QuestionsPage from './pages/QuestionsPage'
 import CheatsheetPage from './pages/CheatsheetPage'
 import EcosystemPage from './pages/EcosystemPage'
+import LabPage from './pages/LabPage'
+import LabStepPage from './pages/LabStepPage'
 
 export default function App() {
   return (
@@ -13,6 +15,8 @@ export default function App() {
       <Route path="/questions" element={<QuestionsPage />} />
       <Route path="/cheatsheet" element={<CheatsheetPage />} />
       <Route path="/ecosystem" element={<EcosystemPage />} />
+      <Route path="/lab" element={<LabPage />} />
+      <Route path="/lab/:step" element={<LabStepPage />} />
     </Routes>
   )
 }

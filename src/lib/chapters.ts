@@ -29,7 +29,7 @@ const stripQuotes = (s: string) =>
 type ListItem = string | Record<string, string>;
 
 /** 轻量 frontmatter 解析：标量、[a, b] 行内列表、- item 字符串列表、- q:/a: 对象列表 */
-function parseFrontmatter(raw: string): { data: Record<string, string | string[] | ListItem[]>; body: string } {
+export function parseFrontmatter(raw: string): { data: Record<string, string | string[] | ListItem[]>; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
   if (!match) return { data: {}, body: raw };
 

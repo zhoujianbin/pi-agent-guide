@@ -104,6 +104,21 @@ const ecoResults = await page.evaluate(() => document.querySelector('[role="dial
 if (ecoResults.includes("生态") && ecoResults.includes("pi-web-access")) ok("搜索「pi-web-access」命中生态精选条目");
 else fail("生态搜索异常");
 
+// 7. 实战专栏：索引页 + 关卡详情页静态渲染
+await page.goto(`http://127.0.0.1:${port}/lab/`, { waitUntil: "networkidle0" });
+await page.waitForSelector("#lab-root", { timeout: 15000 });
+const labText = await page.evaluate(() => document.body.innerText);
+if (labText.includes("动手做一个") && labText.includes("上下文压缩")) ok("实战索引页静态渲染正常");
+else fail("实战索引页内容缺失");
+await page.goto(`http://127.0.0.1:${port}/lab/2/`, { waitUntil: "networkidle0" });
+await page.waitForSelector("#lab-step-root .md-body", { timeout: 15000 });
+const lab2Text = await page.evaluate(() => document.body.innerText);
+if (lab2Text.includes("Agent Loop") && lab2Text.includes("tool_call_id")) ok("第 2 关详情页静态渲染正常");
+else fail("第 2 关内容缺失");
+const lab2Title = await page.evaluate(() => document.title);
+if (lab2Title.includes("实战第2关")) ok("第 2 关 title 正确");
+else fail("第 2 关 title 异常: " + lab2Title);
+
 await browser.close();
 server.close();
 console.log(process.exitCode ? "—— 有失败项" : "—— 全部通过");

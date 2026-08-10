@@ -5,6 +5,7 @@ import { WhyPi } from "@/sections/WhyPi";
 import { LearningPath } from "@/sections/LearningPath";
 import { ChapterGrid } from "@/sections/ChapterGrid";
 import { AboutPi } from "@/sections/AboutPi";
+import { LabPromo } from "@/sections/LabPromo";
 import { FollowMe } from "@/sections/FollowMe";
 import { useReveal } from "@/hooks/useReveal";
 import { useEffect } from "react";
@@ -25,6 +26,7 @@ export default function Home() {
         <WhyPi />
         <LearningPath />
         <ChapterGrid />
+        <LabPromo />
         <AboutPi />
         <FollowMe />
       </main>
