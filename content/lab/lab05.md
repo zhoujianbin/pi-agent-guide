@@ -9,9 +9,11 @@ tags: [总装, REPL, 系统工程]
 
 前四关都是"跑一条命令就退出"的玩具。这一关组装成**可交互的 mini agent**：启动后进入 REPL，你可以连续下指令，它带着记忆干活，报工具错误时会自我修正，每次回复后显示花费，输入 `/exit` 退出。
 
-大约 150 行，就是你能日常用起来的最小完整形态。
+大约 100 行，就是你能日常用起来的最小完整形态。
 
 ## 完整代码
+
+> 📦 配套代码：[github.com/zhoujianbin/pi-mini-agent](https://github.com/zhoujianbin/pi-mini-agent)，`npm run lab05` 直接跑（已实测：连续多轮对话、读不存在文件后错误自愈均正常）。
 
 新建 `lab05/mini.mjs`：
 
@@ -52,7 +54,7 @@ const SYSTEM_PROMPT = `你是 mini-agent，一个在终端里帮用户处理文�
 
 // ---------- 模型调用 ----------
 async function callModel(messages) {
-  const res = await fetch(`${BASE_URL}/v1/chat/completions`, {
+  const res = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
     body: JSON.stringify({ model: MODEL, messages, tools }),
@@ -96,20 +98,26 @@ async function runTask(messages, task) {
 
 // ---------- REPL ----------
 const rl = createInterface({ input: process.stdin, output: process.stdout, prompt: "\n你> " });
+// 管道输入或 Ctrl+D 会让 stdin 提前关闭，之后再 prompt 会抛 ERR_USE_AFTER_CLOSE
+// （这个 bug 也是我们实跑时真踩出来的）
+let closed = false;
+rl.on("close", () => (closed = true));
+const safePrompt = () => { if (!closed) rl.prompt(); };
+
 const messages = [{ role: "system", content: SYSTEM_PROMPT }];
 
 console.log(`mini-agent 已启动（模型 ${MODEL}，工作目录 ${WORKDIR}），输入 /exit 退出`);
-rl.prompt();
+safePrompt();
 
 for await (const line of rl) {
   const input = line.trim();
-  if (!input) { rl.prompt(); continue; }
+  if (!input) { safePrompt(); continue; }
   if (input === "/exit") break;
 
   const reply = await runTask(messages, input);
   console.log(`agent> ${reply}`);
   console.log(`\x1b[2m（累计 ${totalTokens} tokens）\x1b[0m`);
-  rl.prompt();
+  safePrompt();
 }
 rl.close();
 ```

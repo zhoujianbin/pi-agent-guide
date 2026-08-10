@@ -19,6 +19,8 @@ tags: [streaming, SSE, 事件]
 
 ## 完整代码
 
+> 📦 配套代码：[github.com/zhoujianbin/pi-mini-agent](https://github.com/zhoujianbin/pi-mini-agent)，`npm run lab03` 直接跑（已实测：SSE 流式输出 + 流式工具调用均正常）。
+
 新建 `lab03/stream.mjs`（在第 2 关基础上改，工具部分原样保留）：
 
 ```js
@@ -44,7 +46,7 @@ const tools = [/* …与第 2 关完全相同，此处省略… */];
 
 // ---- 流式调用：返回组装好的完整 message，过程中实时打印 ----
 async function callModelStreaming(messages) {
-  const res = await fetch(`${BASE_URL}/v1/chat/completions`, {
+  const res = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -17,10 +17,13 @@ tags: [热身, messages, 零依赖]
 node --version   # 需要 20 以上，自带全局 fetch
 
 # 任选一个 OpenAI 兼容的供应商，以 DeepSeek 为例
-export OPENAI_COMPATIBLE_BASE_URL="https://api.deepseek.com"
+# 约定：BASE_URL 以 /v1 结尾，代码里统一拼 /chat/completions
+export OPENAI_COMPATIBLE_BASE_URL="https://api.deepseek.com/v1"
 export OPENAI_COMPATIBLE_API_KEY="你的 key"
 export MODEL="deepseek-chat"
 ```
+
+> 📦 配套代码已开源：[github.com/zhoujianbin/pi-mini-agent](https://github.com/zhoujianbin/pi-mini-agent)，克隆下来 `npm run lab01` 即可直接跑本关（已用真实 API 实测通过）。
 
 ## 完整代码
 
@@ -28,7 +31,7 @@ export MODEL="deepseek-chat"
 
 ```js
 // lab01/chat.mjs —— 最小的一次模型调用
-const BASE_URL = process.env.OPENAI_COMPATIBLE_BASE_URL;
+const BASE_URL = process.env.OPENAI_COMPATIBLE_BASE_URL; // 形如 https://api.deepseek.com/v1
 const API_KEY = process.env.OPENAI_COMPATIBLE_API_KEY;
 const MODEL = process.env.MODEL ?? "deepseek-chat";
 
@@ -43,7 +46,7 @@ const messages = [
   { role: "user", content: "用一句话解释什么是 AI Agent。" },
 ];
 
-const res = await fetch(`${BASE_URL}/v1/chat/completions`, {
+const res = await fetch(`${BASE_URL}/chat/completions`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -89,7 +92,7 @@ node lab01/chat.mjs
 
 ## 常见坑
 
-- **401 Unauthorized**：key 没设置或拼接了多余的 `/v1`（有的供应商 BASE_URL 已含 `/v1`，注意别重复）
+- **401 / 404 Unauthorized**：key 没设置，或 BASE_URL 少了 `/v1`——本教程约定 BASE_URL 以 `/v1` 结尾、代码里拼 `/chat/completions`，两头只能有一处 `/v1`
 - **把回复当字符串用**：`choices[0].message` 是对象，下一轮 push 的也必须是这个对象，不能图省事只存 `.content`
 - **以为模型记得上次运行**：每次 `node chat.mjs` 都是全新对话，进程结束状态就没了——会话持久化是第 5 关的事
 

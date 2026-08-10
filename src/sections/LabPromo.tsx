@@ -20,7 +20,7 @@ export function LabPromo() {
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
               零依赖、零框架、纯 Node.js。从一次裸 fetch 开始，逐关加上工具调用、流式事件、上下文压缩，
-              每关结尾对照 Pi 源码验收——理论给地图，动手给肌肉记忆。
+              每关结尾对照 Pi 源码验收——理论给地图，动手给肌肉记忆。配套代码已开源（pi-mini-agent），5 关全部实测可跑。
             </p>
           </div>
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2.5 text-sm font-bold text-white shadow-soft transition-transform group-hover:scale-105">

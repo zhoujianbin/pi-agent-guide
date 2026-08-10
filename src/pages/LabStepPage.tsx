@@ -6,7 +6,7 @@ import { applyPageMeta, SITE_NAME } from "@/lib/seo";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, FlaskConical, LayoutGrid } from "lucide-react";
+import { ArrowLeft, ArrowRight, FlaskConical, Github, LayoutGrid } from "lucide-react";
 
 export default function LabStepPage() {
   const { step } = useParams();
@@ -70,6 +70,16 @@ export default function LabStepPage() {
             <LayoutGrid size={13} />
             关卡目录
           </Link>
+          <a
+            href="https://github.com/zhoujianbin/pi-mini-agent"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={navBtn}
+            title="本关配套代码（已开源，实测可跑）"
+          >
+            <Github size={13} />
+            配套代码
+          </a>
           {next ? (
             <Link to={`/lab/${next.step}/`} className={navBtn}>
               下一关

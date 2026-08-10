@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router";
-import { ArrowRight, FlaskConical, Hammer, TerminalSquare } from "lucide-react";
+import { ArrowRight, FlaskConical, Github, Hammer, TerminalSquare } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { labs } from "@/lib/lab";
@@ -60,6 +60,33 @@ export default function LabPage() {
           </div>
         </section>
 
+        {/* 配套开源仓库 */}
+        <a
+          href="https://github.com/zhoujianbin/pi-mini-agent"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="reveal group mb-12 flex flex-col items-start gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-soft transition-transform duration-300 hover:-translate-y-1 sm:flex-row sm:items-center sm:p-7"
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-foreground text-background shadow-soft">
+            <Github size={20} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="text-base font-bold text-foreground">配套代码已开源：pi-mini-agent</span>
+              <Badge variant="secondary" className="border border-emerald-100 bg-emerald-50/70 font-mono text-[10px] text-emerald-700">
+                5 关全部用真实 API 实测通过
+              </Badge>
+            </span>
+            <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
+              克隆下来配好 Key 就能逐关跑，含 playground 测试文件；实跑中踩出的两个真实 bug 也留在了代码注释里。
+            </span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border px-4 py-2 font-mono text-xs font-bold text-foreground transition-colors group-hover:border-emerald-400 group-hover:text-emerald-600">
+            github.com/zhoujianbin/pi-mini-agent
+            <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </a>
+
         {/* 关卡列表 */}
         <div className="flex flex-col gap-5">
           {labs.map((lab) => (
@@ -118,7 +145,16 @@ export default function LabPage() {
 
         <p className="reveal mt-8 text-center font-mono text-xs text-muted-foreground/60">
           <FlaskConical size={11} className="mr-1 inline" />
-          专栏代码均为原创教学示例，MIT 许可，随意取用
+          专栏代码均为原创教学示例，已开源在{" "}
+          <a
+            href="https://github.com/zhoujianbin/pi-mini-agent"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dotted underline-offset-2 hover:text-emerald-600"
+          >
+            pi-mini-agent
+          </a>
+          ，MIT 许可，随意取用
         </p>
       </main>
       <Footer />

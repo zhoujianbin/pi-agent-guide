@@ -24,6 +24,8 @@ cd ..
 
 ## 完整代码
 
+> 📦 配套代码：[github.com/zhoujianbin/pi-mini-agent](https://github.com/zhoujianbin/pi-mini-agent)，`npm run lab02` 直接跑（已实测：模型甚至会并行调用多个工具）。
+
 新建 `lab02/agent.mjs`：
 
 ```js
@@ -89,7 +91,7 @@ const tools = [
 
 // ---- 3. 一次模型调用 ----
 async function callModel(messages) {
-  const res = await fetch(`${BASE_URL}/v1/chat/completions`, {
+  const res = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
