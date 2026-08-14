@@ -40,6 +40,9 @@ const ECOSYSTEM_DESCRIPTION =
 const LAB_TITLE = "动手做一个 mini Agent：5 关从零写出自己的 Agent | PI agent学习指南";
 const LAB_DESCRIPTION =
   "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩，最后组装成可交互的 mini agent，每关对照 Pi 源码讲清原理。";
+const CHANGELOG_TITLE = "Pi 版本雷达：每个版本更新了啥，对应指南哪一章 | PI agent学习指南";
+const CHANGELOG_DESCRIPTION =
+  "追踪 Pi（earendil-works/pi）官方版本更新：v0.73 至最新版的中文人话解读，每条变更标注对应指南章节——压缩重试、全屏 TUI、远程会话、约束采样、项目信任，读完指南也能跟上迭代。";
 const LAB_DIR = path.join(ROOT, "content", "lab");
 
 /* ---------- frontmatter 轻量解析（与 src/lib/chapters.ts 逻辑一致） ---------- */
@@ -302,6 +305,13 @@ async function main() {
       outDir: "lab",
       jsonLd: () => webpageJsonLd(LAB_TITLE, LAB_DESCRIPTION, "/lab/"),
     },
+    "/changelog/": {
+      title: CHANGELOG_TITLE,
+      description: CHANGELOG_DESCRIPTION,
+      ready: "#root #changelog-root",
+      outDir: "changelog",
+      jsonLd: () => webpageJsonLd(CHANGELOG_TITLE, CHANGELOG_DESCRIPTION, "/changelog/"),
+    },
   };
 
   const routes = [
@@ -384,6 +394,7 @@ async function main() {
     `  <url><loc>${SITE_URL}/cheatsheet/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/ecosystem/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/lab/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+    `  <url><loc>${SITE_URL}/changelog/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     ...chapters.map(
       (c) =>
         `  <url><loc>${SITE_URL}/chapter/${c.id}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,

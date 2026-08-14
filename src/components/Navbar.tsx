@@ -9,6 +9,7 @@ const links = [
   { href: "/#path", label: "学习路径" },
   { href: "/#chapters", label: "十章指南" },
   { href: "/lab/", label: "实战" },
+  { href: "/changelog/", label: "版本雷达" },
   { href: "/questions/", label: "面试30题" },
   { href: "/cheatsheet/", label: "速查表" },
   { href: "/ecosystem/", label: "生态精选" },

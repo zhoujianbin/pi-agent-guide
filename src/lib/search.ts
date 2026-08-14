@@ -6,9 +6,10 @@
 import { chapters } from "@/lib/chapters";
 import { flattenCheatsheet } from "@/lib/cheatsheet";
 import { flattenEcosystem } from "@/lib/ecosystem";
+import { flattenChangelog } from "@/lib/changelog";
 import { labs } from "@/lib/lab";
 
-export type SearchKind = "chapter" | "question" | "cheat" | "eco" | "lab";
+export type SearchKind = "chapter" | "question" | "cheat" | "eco" | "lab" | "log";
 
 export interface SearchEntry {
   kind: SearchKind;
@@ -98,6 +99,16 @@ function buildIndex(): SearchEntry[] {
       crumb: item.group,
       text: `${item.key} ${item.desc}`.toLowerCase(),
       to: "/ecosystem/",
+    });
+  }
+
+  for (const item of flattenChangelog()) {
+    entries.push({
+      kind: "log",
+      title: item.title,
+      crumb: item.crumb,
+      text: item.text,
+      to: item.to,
     });
   }
 
