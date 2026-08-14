@@ -38,7 +38,7 @@ const KIND_META: Record<SearchKind, { label: string; cls: string; icon: ReactNod
 
 const HOT_ENTRIES = [
   { to: "/#chapters", label: "十章指南目录", desc: "从三层架构到会话树，逐章拆解" },
-  { to: "/lab/", label: "实战实验室", desc: "5 关从零写一个 mini Agent" },
+  { to: "/lab/", label: "实战实验室", desc: "6 关从零写一个 mini Agent" },
   { to: "/changelog/", label: "版本雷达", desc: "每个版本更新了啥，对应哪一章" },
   { to: "/questions/", label: "面试 30 题", desc: "30 问 30 答，读完自测" },
   { to: "/cheatsheet/", label: "命令速查表", desc: "斜杠命令 / CLI / 快捷键" },

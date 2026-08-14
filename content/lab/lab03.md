@@ -7,7 +7,7 @@ tags: [streaming, SSE, 事件]
 
 ## 这一关做什么
 
-前两关里，模型思考多久，你的终端就"死"多久。这一关把响应改成**流式**：文字一个一个蹦出来，工具调用一冒头就能看到。你会亲手解析 SSE（Server-Sent Events）数据流，理解"增量事件"这个模型——它是第 6 章事件驱动架构的物理基础。
+前两关里，模型思考多久，你的终端就"死"多久。这一关把响应改成**流式**：文字一个一个蹦出来，工具调用一冒头就能看到。你会亲手解析 SSE（Server-Sent Events）数据流，理解"增量事件"这个模型——它是第 7 章事件驱动架构的物理基础。
 
 ## 动手前
 
@@ -137,7 +137,7 @@ node lab03/stream.mjs "读出所有文件内容，写一份带标题的汇总到
 
 **1. SSE 协议很朴素。** 响应体就是文本流：`data: {一小段JSON}\n\n` 不断到来，最后以 `data: [DONE]` 收尾。没有魔法，不需要库。
 
-**2. delta 而不是 message。** 非流式时你拿到完整的 `message`；流式时每一片只带**变化量** `delta`。这正对应第 6 章里 `message_start / message_update / message_end` 的事件序列——Pi 把每个 delta 翻译成事件，TUI 订阅事件刷新界面。
+**2. delta 而不是 message。** 非流式时你拿到完整的 `message`；流式时每一片只带**变化量** `delta`。这正对应第 7 章里 `message_start / message_update / message_end` 的事件序列——Pi 把每个 delta 翻译成事件，TUI 订阅事件刷新界面。
 
 **3. 工具参数是分片的。** `arguments` 这个 JSON 字符串会切成好几段陆续到达（比如先 `{"filena`，再 `me": "hel`，再 `lo.txt"}`）。必须按 `index` 归位逐段拼接，等流结束后才能 `JSON.parse`。这是流式工具调用最容易踩的坑。
 
@@ -153,9 +153,9 @@ node lab03/stream.mjs "读出所有文件内容，写一份带标题的汇总到
 
 - [ ] 能画出 SSE 流里一轮对话的事件顺序
 - [ ] 能解释为什么 tool_calls 要带 index 归位
-- [ ] 能说出 delta 模型与第 6 章事件类型的对应关系
+- [ ] 能说出 delta 模型与第 7 章事件类型的对应关系
 
 ## 对应理论章节
 
-- 第 5 章：消息系统——partial message 如何长成完整消息
-- 第 6 章：事件驱动——message_update 事件就是 delta 的封装
+- 第 6 章：消息系统——partial message 如何长成完整消息
+- 第 7 章：事件驱动——message_update 事件就是 delta 的封装

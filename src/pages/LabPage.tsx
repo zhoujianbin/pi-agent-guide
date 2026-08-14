@@ -8,9 +8,9 @@ import { applyPageMeta } from "@/lib/seo";
 import { useReveal } from "@/hooks/useReveal";
 import { Badge } from "@/components/ui/badge";
 
-export const LAB_TITLE = "动手做一个 mini Agent：5 关从零写出自己的 Agent | PI agent学习指南";
+export const LAB_TITLE = "动手做一个 mini Agent：6 关从零写出自己的 Agent | PI agent学习指南";
 export const LAB_DESCRIPTION =
-  "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩，最后组装成可交互的 mini agent，每关对照 Pi 源码讲清原理。";
+  "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩、可交互 REPL 与会话分叉，每关对照 Pi 源码讲清原理。";
 
 const PREP = [
   { k: "Node 20+", v: "自带全局 fetch，不用装任何依赖" },
@@ -37,7 +37,7 @@ export default function LabPage() {
           </h1>
           <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
             十章指南告诉你 Pi 是怎么设计的；这个专栏让你<strong className="text-foreground">亲手写一个</strong>。
-            零依赖、零框架，5 关从一次裸 fetch 开始，逐关加工具、流式、压缩，最后组装成能日常用的小助手。
+            零依赖、零框架，6 关从一次裸 fetch 开始，逐关加工具、流式、压缩、REPL，最后给会话装上分叉时光机。
             每关结尾对照 Pi 源码——读完理论再来动手，或者动手卡住了回去翻理论，都行。
           </p>
         </header>
@@ -74,7 +74,7 @@ export default function LabPage() {
             <span className="flex flex-wrap items-center gap-2">
               <span className="text-base font-bold text-foreground">配套代码已开源：pi-mini-agent</span>
               <Badge variant="secondary" className="border border-emerald-100 bg-emerald-50/70 font-mono text-[10px] text-emerald-700">
-                5 关全部用真实 API 实测通过
+                6 关全部用真实 API 实测通过
               </Badge>
             </span>
             <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">
@@ -131,7 +131,7 @@ export default function LabPage() {
           </div>
           <p className="mt-4 text-lg font-bold text-foreground">先读理论还是直接上手？</p>
           <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            推荐交替进行：第 1~2 关配第 2、4 章，第 3 关配第 5、6 章，第 4 关配第 8、9 章，第 5 关配第 3、7、10 章。
+            推荐交替进行：第 1~2 关配第 3、5 章，第 3 关配第 6、7 章，第 4 关配第 8、9 章，第 5 关配第 3、4 章，第 6 关配第 10 章。
             理论给地图，动手给肌肉记忆。
           </p>
           <Link

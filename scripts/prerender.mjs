@@ -37,9 +37,9 @@ const CHEATSHEET_DESCRIPTION =
 const ECOSYSTEM_TITLE = "Pi 生态精选：值得装的社区扩展与技能包 | PI agent学习指南";
 const ECOSYSTEM_DESCRIPTION =
   "从 Pi 官方包注册表（5300+ 社区包）精选的中文导购：子代理与工作流、记忆与上下文、计划协作、代码质量、安全权限、联网集成、技能方法论与可观测性，每个包附一句话简介与一行安装命令。";
-const LAB_TITLE = "动手做一个 mini Agent：5 关从零写出自己的 Agent | PI agent学习指南";
+const LAB_TITLE = "动手做一个 mini Agent：6 关从零写出自己的 Agent | PI agent学习指南";
 const LAB_DESCRIPTION =
-  "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩，最后组装成可交互的 mini agent，每关对照 Pi 源码讲清原理。";
+  "零依赖、零框架、纯 Node.js：从一次裸 fetch 调用开始，逐关加上工具调用循环、流式事件、上下文压缩、可交互 REPL 与会话分叉，每关对照 Pi 源码讲清原理。";
 const CHANGELOG_TITLE = "Pi 版本雷达：每个版本更新了啥，对应指南哪一章 | PI agent学习指南";
 const CHANGELOG_DESCRIPTION =
   "追踪 Pi（earendil-works/pi）官方版本更新：v0.73 至最新版的中文人话解读，每条变更标注对应指南章节——压缩重试、全屏 TUI、远程会话、约束采样、项目信任，读完指南也能跟上迭代。";

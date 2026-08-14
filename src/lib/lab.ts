@@ -3,6 +3,7 @@ import lab02 from "../../content/lab/lab02.md?raw";
 import lab03 from "../../content/lab/lab03.md?raw";
 import lab04 from "../../content/lab/lab04.md?raw";
 import lab05 from "../../content/lab/lab05.md?raw";
+import lab06 from "../../content/lab/lab06.md?raw";
 import { parseFrontmatter } from "@/lib/chapters";
 
 export interface LabDoc {
@@ -13,7 +14,7 @@ export interface LabDoc {
   body: string;
 }
 
-const raws = [lab01, lab02, lab03, lab04, lab05];
+const raws = [lab01, lab02, lab03, lab04, lab05, lab06];
 
 function toDoc(raw: string, fallbackStep: number): LabDoc {
   const { data, body } = parseFrontmatter(raw);

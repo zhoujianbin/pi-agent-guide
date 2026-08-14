@@ -94,7 +94,7 @@ node lab01/chat.mjs
 
 - **401 / 404 Unauthorized**：key 没设置，或 BASE_URL 少了 `/v1`——本教程约定 BASE_URL 以 `/v1` 结尾、代码里拼 `/chat/completions`，两头只能有一处 `/v1`
 - **把回复当字符串用**：`choices[0].message` 是对象，下一轮 push 的也必须是这个对象，不能图省事只存 `.content`
-- **以为模型记得上次运行**：每次 `node chat.mjs` 都是全新对话，进程结束状态就没了——会话持久化是第 5 关的事
+- **以为模型记得上次运行**：每次 `node chat.mjs` 都是全新对话，进程结束状态就没了——会话持久化是第 6 关的事
 
 ## 闯关自测
 
@@ -104,5 +104,5 @@ node lab01/chat.mjs
 
 ## 对应理论章节
 
-- 第 1 章：三层架构总览——我们这一关在徒手实现 `pi-ai` 层的最小功能
-- 第 5 章：消息系统——AgentMessage 与 LLM Message 的转换，第一站就是这里
+- 第 1、2 章：总览与三层架构——我们这一关在徒手实现 `pi-ai` 层的最小功能
+- 第 6 章：消息系统——AgentMessage 与 LLM Message 的转换，第一站就是这里
