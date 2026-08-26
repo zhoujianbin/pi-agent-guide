@@ -339,6 +339,13 @@ async function main() {
       await page.waitForSelector(readySelector, { timeout: 30000 });
       let html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
 
+      // 清理：源码 index.html 里百度统计是异步注入的（createElement + insertBefore），
+      // 但预渲染抓取时 hm.js 脚本元素已插入 DOM，outerHTML 会把它序列化成
+      // <head> 里**同步阻塞**的 <script src="https://hm.baidu.com/...">。
+      // 一旦该域名不可达（如部分 Clash 广告/追踪规则 REJECT hm.baidu.com），
+      // 整页会卡在白屏。静态产物里剔除它——运行时原异步加载器仍在，会重新注入。
+      html = html.replace(/<script\s+src="https?:\/\/hm\.baidu\.com\/[^"]*"[^>]*>\s*<\/script>/g, "");
+
       const title = isHome
         ? HOME_TITLE
         : staticPage
