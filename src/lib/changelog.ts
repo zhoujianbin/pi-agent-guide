@@ -24,10 +24,42 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-08-14";
+export const CHANGELOG_UPDATED = "2026-09-14";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v0.85",
+    date: "2026-09-04",
+    headline: "GPT-6 Astra 上线、Claude thinking 力度跨轮保持、SDK 能恢复外部存储的内存会话",
+    items: [
+      {
+        text: "GPT-6 Astra 模型上线：OpenAI API key 和 OpenAI Codex 订阅都能直接用（v0.85.1）",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "持久化 Claude thinking effort：支持的 Anthropic 传输层会保留每轮 effort，并从签名 thinking 不匹配中安全恢复——thinking 设置不再「一轮就丢」",
+        chapters: [4],
+      },
+      {
+        text: "SessionManager.inMemory() 支持恢复外部管理的会话条目——SDK 场景下内存会话也能「断点续传」",
+        chapters: [10],
+      },
+      {
+        text: "全屏转录新增「跳到最新消息」按钮，工作指示器内嵌进编辑器边框并跟随 thinking 级别配色；Alt+滚轮五倍速滚动（v0.85.1）",
+        tag: "TUI",
+      },
+      {
+        text: "修复 0.85.0 误发布内部实验代码导致的 SDK 导入失败：client 与 experimental/plugin 子路径改为仅源码提供，受支持的本地 SDK 与 stdio RPC API 不变（v0.85.1）",
+        tag: "工程",
+      },
+      {
+        text: "GPT-5.6+ Responses 模型的长 prompt 缓存改用 prompt_cache_options.ttl: \"30m\"，替代不再适用的 24h 保留字段（v0.85.1）",
+        chapters: [8],
+      },
+    ],
+  },
   {
     version: "v0.84",
     date: "2026-08-06",
@@ -59,6 +91,29 @@ export const changelogVersions: ChangelogVersion[] = [
         text: "扩展的 tool_call 事件支持 terminate：拦截工具调用后可以直接终止整批，不再多发一次模型请求（v0.84.1）",
         chapters: [5],
         tag: "扩展",
+      },
+      {
+        text: "defaultTools 设置：全局或按项目配置启动时加载的内置工具集（v0.84.2）；Windows 新增可选原生 PowerShell 工具（v0.84.3）",
+        chapters: [5],
+      },
+      {
+        text: "/thinking 选择器上线，模型与 thinking 选择默认只在当前会话生效，Ctrl+S 才显式保存为全局默认——告别「选一次就改了全局配置」（v0.84.3）",
+        chapters: [4],
+        tag: "TUI",
+      },
+      {
+        text: "session_compact_failed 扩展事件：压缩失败与中止暴露原因、重试状态和错误信息；大工具结果越过阈值时改为同一轮内「先执行工具、再压缩、再继续」（v0.84.3 / v0.84.4）",
+        chapters: [9],
+        tag: "扩展",
+      },
+      {
+        text: "RPC clear_queue 可取回并清空排队的 steering / follow-up 消息；ui_prompt_start / ui_prompt_end 事件让宿主区分「agent 在干活」和「在等用户输入」（v0.84.4）",
+        chapters: [7],
+      },
+      {
+        text: "GoogleThinkingLevel 类型更名为 GoogleApiThinkingLevel，新增 ResolvedGoogleThinkingLevel——写 Google 相关扩展的需要改名（v0.84.3）",
+        tag: "扩展",
+        breaking: true,
       },
     ],
   },
