@@ -24,10 +24,46 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-09-14";
+export const CHANGELOG_UPDATED = "2026-09-21";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v0.86",
+    date: "2026-09-19",
+    headline: "Prompt 缓存学会「保温」、对话中途换提示词与工具不再断档、约束采样默认转正、压缩预算可按模型配；Meta Muse 新 Provider 随 v0.86.1 登场",
+    items: [
+      {
+        text: "成本感知的 Prompt 缓存保温：长工具运行期间（可选空闲时）自动刷新保住缓存前缀，附 /session 诊断、转录提示和 cache_warming_decision 扩展事件——第 8 章缓存经济学有了主动武器",
+        chapters: [8],
+      },
+      {
+        text: "对话中途更新系统提示词和工具定义可跨 resume 与分支导航保留，同时尽量保住缓存前缀（before_agent_start）——消息历史从「静态快照」变成「可演进转录」",
+        chapters: [6, 10],
+        tag: "扩展",
+      },
+      {
+        text: "严格 JSON Schema 约束采样对内置 read / bash / powershell / edit / write 默认开启，不再需要 PI_EXPERIMENTAL——工具调用的 schema 保障正式转正",
+        chapters: [5],
+      },
+      {
+        text: "按模型配置压缩预算：compaction.modelOverrides 里为不同模型单独设 reserveTokens / keepRecentTokens，普通压缩设置作为兜底",
+        chapters: [9],
+      },
+      {
+        text: "pi-ai 自定义 Provider 流输入从 Context 改为规范化 TranscriptContext：系统提示词和工具声明改用 getCurrentSystemPrompt() / getCurrentTools() 读取；ToolCall.arguments 与 ToolResultMessage.details 限定为 JSON 兼容值——自定义 Provider 需要迁移",
+        chapters: [4],
+        tag: "Provider",
+        breaking: true,
+      },
+      {
+        text: "user_bash 改为失败即关闭：handler 抛错或返回非法结果会直接中止命令，不再放行本地执行——bash 拦截的安全默认值反转",
+        chapters: [5],
+        tag: "扩展",
+        breaking: true,
+      },
+    ],
+  },
   {
     version: "v0.85",
     date: "2026-09-04",
