@@ -24,10 +24,112 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-09-21";
+export const CHANGELOG_UPDATED = "2026-10-03";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v1.0",
+    date: "2026-10-01",
+    headline: "Pi 1.0：全屏成为默认、codemode 瘦身四成、脚本里直接生成图片",
+    items: [
+      {
+        text: "全屏 TUI 成为默认模式——从 v0.84 的实验特性到 1.0 的默认形态；想保留终端普通滚动用 tuiMode: \"regular\" 或 --tui-mode regular",
+        tag: "TUI",
+      },
+      {
+        text: "codemode 大幅瘦身：默认工具下 GPT-5.6 请求从约 5300 降到约 3300 token——工具声明只写一行调用方式，详细 models API 让模型按需去读；报错会教模型怎么自我恢复",
+        chapters: [5, 8],
+      },
+      {
+        text: "codemode 脚本可以生成图片：models.generateImages() 用会话凭据调图片模型，返回 base64 由 image() 附进结果，花费计入会话成本；扩展对应 ctx.modelRegistry.generateImages()",
+        chapters: [5],
+        tag: "扩展",
+      },
+      {
+        text: "MCP OAuth 加固：oauth.authServerMetadataUrl 应对错误的服务器元数据、RFC 9207 iss 校验防跨服务器混用、凭据按「服务器名+URL」存储、补充授权时保留已授予的 scope",
+        tag: "安全",
+      },
+      {
+        text: "Radius 进入 /login：登录后一键配置 Radius MCP 服务器；Anthropic 新增 copy code 登录，浏览器在另一台机器的无头环境也能授权",
+        tag: "Provider",
+      },
+      {
+        text: "quietStartup: \"header\" 只保留版本号和按键提示的精简启动头",
+        tag: "TUI",
+      },
+    ],
+  },
+  {
+    version: "v0.99",
+    date: "2026-09-29",
+    headline: "Codemode 与 MCP 登场：模型写 JavaScript 编排工具；虚拟模型、分类器、ChatGPT 登录一起来",
+    items: [
+      {
+        text: "codemode：模型写的 JavaScript 在 QuickJS 沙箱里并行调用 Pi 工具，配 tool_search 按需声明未暴露的工具——工具编排从「一个一个调」变成「写脚本调」",
+        chapters: [5],
+      },
+      {
+        text: "MCP 服务器支持：stdio 与 streamable HTTP 传输、OAuth 登录、mcp.json 全局或项目级配置、/mcp 与 pi mcp add 管理；v0.99.2 起默认 codemode 曝光的服务器不再阻塞首条 prompt，改在系统提示词的 mcp_servers 短段落里列名",
+        chapters: [5],
+        tag: "扩展",
+      },
+      {
+        text: "扩展工具编排 API：exposure（direct / model-only / codemode / deferred / hidden）、namespace、outputSchema 结构化输出、ctx.executeTool() 嵌套调用并记录 nestedCalls——第 5 章的工具系统长出了「元工具」层",
+        chapters: [5],
+        tag: "扩展",
+      },
+      {
+        text: "实验性虚拟模型 pi.registerVirtualModel()：扩展按请求路由到不同物理模型，页脚显示路由结果、/session 按物理模型分别计成本；Jev 分类器模型内建，llama.cpp 模型也能当分类器",
+        chapters: [4],
+        tag: "扩展",
+      },
+      {
+        text: "Sign in with ChatGPT：OpenAI Provider 直接用 ChatGPT 订阅登录，旧 OpenAI Codex Provider 改名 legacy；GPT-6.1 Sol 上线并成为 Codex 新默认（v0.99.1）",
+        tag: "Provider",
+      },
+      {
+        text: "system 主题成为默认：Pi 的颜色跟随终端自己的调色板，明暗切换自动重建——终端是什么样，Pi 就是什么样",
+        tag: "TUI",
+      },
+    ],
+  },
+  {
+    version: "v0.87",
+    date: "2026-09-21",
+    headline: "会话上下文可以「改视图不改历史」，Claude Opus 5.5 与 GPT-6 Sol/Luna 新模型上线",
+    items: [
+      {
+        text: "追加式上下文编辑 ContextEditEntry：sessionManager.appendContextEdit() 把某条消息从未来 Provider 上下文里略去，原始历史、用量统计和 UI 展示原封不动——上下文工程多了把「手术刀」",
+        chapters: [8, 10],
+      },
+      {
+        text: "context_with_system 扩展事件：在 context 之后对含系统消息的完整转录做每请求变换；同时 context 处理器不再能看到系统消息，过滤导致的 prompt 和工具声明丢失由 Pi 自动恢复",
+        chapters: [7],
+        tag: "扩展",
+      },
+      {
+        text: "按模型配置图片输入限制：models.json 里 inputLimits.images.resize 做缓存安全的缩放，对附件、read 和工具结果里的图片统一生效",
+        chapters: [8],
+      },
+      {
+        text: "新模型：Claude Opus 5.5（adaptive thinking + 1M 上下文）、GPT-6 Sol / GPT-6 Luna 上线，GitHub Copilot 同步支持；xAI 默认模型改为 Grok 4.7（v0.87.1）",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "shouldStopAfterTurn 选项移除：改用 finishTurn 返回 { action: \"end\" }，且 finishTurn 也会收到出错和中止的响应——「每轮后是否停」的判断换了钩子",
+        chapters: [3],
+        tag: "扩展",
+        breaking: true,
+      },
+      {
+        text: "SessionManager 成为 Provider 上下文的唯一权威：直接赋值 session.agent.state.messages 不再影响后续请求，须用 SessionManager.inMemory() / navigateTree() / refreshContext()；TurnEndEvent 增加必填边界字段、新增 agent_before_settle 事件",
+        chapters: [7, 10],
+        breaking: true,
+      },
+    ],
+  },
   {
     version: "v0.86",
     date: "2026-09-19",
