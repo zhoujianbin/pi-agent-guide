@@ -7,9 +7,9 @@ import { chapters } from "@/lib/chapters";
 import { applyPageMeta } from "@/lib/seo";
 import { useReveal } from "@/hooks/useReveal";
 
-export const QUESTIONS_TITLE = "AI Agent 面试题：30 问 30 答（基于生产级源码）| PI agent学习指南";
+export const QUESTIONS_TITLE = "AI Agent 面试题：33 问 33 答（基于生产级源码）| PI agent学习指南";
 export const QUESTIONS_DESCRIPTION =
-  "30 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法与会话树，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
+  "33 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法、会话树与持久化执行，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
 
 export default function QuestionsPage() {
   const ref = useReveal<HTMLDivElement>();
@@ -31,7 +31,7 @@ export default function QuestionsPage() {
             AI Agent 面试题：<span className="text-gradient">{total} 问 {total} 答</span>
           </h1>
           <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
-            全部题目来自《PI agent 学习指南》十章，答案基于开源项目 Pi（GitHub 近 8 万 Star）的生产级源码，
+            全部题目来自《PI agent 学习指南》正篇十章与进阶篇，答案基于开源项目 Pi（GitHub 近 8 万 Star）的生产级源码，
             不是网上抄来的八股文。每题附「展开阅读」，答不上来的地方点进去看完整拆解。
           </p>
         </header>

@@ -28,9 +28,9 @@ const SITE_NAME = "PI agent学习指南";
 const HOME_TITLE = "PI agent学习指南 - 生产级 AI Agent 运行时中文实战教程";
 const HOME_DESCRIPTION =
   "《PI agent学习指南》——基于开源项目 Pi 源码逐行拆解的中文实战教程：十章读懂生产级 AI Agent 运行时，覆盖 Agent Loop、工具管道、上下文工程与会话树，每章附面试问答与架构图解。";
-const QUESTIONS_TITLE = "AI Agent 面试题：30 问 30 答（基于生产级源码）| PI agent学习指南";
+const QUESTIONS_TITLE = "AI Agent 面试题：33 问 33 答（基于生产级源码）| PI agent学习指南";
 const QUESTIONS_DESCRIPTION =
-  "30 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法与会话树，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
+  "33 道 AI Agent 核心面试题与源码级答案：Agent Loop 停止条件、工具管道、消息系统、上下文工程、压缩算法、会话树与持久化执行，全部基于近 8 万 Star 的开源项目 Pi 源码拆解，每题附展开阅读章节。";
 const CHEATSHEET_TITLE = "Pi 速查表：斜杠命令 / CLI 参数 / 快捷键一页全收录 | PI agent学习指南";
 const CHEATSHEET_DESCRIPTION =
   "Pi coding agent 中文速查表：全部斜杠命令（会话分叉、压缩、导出分享）、CLI 参数（四种运行模式、工具白名单、模型切换）、编辑器技巧与默认快捷键，依据官方文档整理，支持页内筛选。";

@@ -1,0 +1,128 @@
+<svg viewBox="0 0 1080 640" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#57534e"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2d6e3c"/>
+    </marker>
+    <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#b5523a"/>
+    </marker>
+  </defs>
+
+  <rect width="1080" height="640" fill="#faf7f2"/>
+
+  <text x="20" y="36" fill="#1c1917" font-size="15" font-weight="700" font-family="'Geist', sans-serif">一次提问的提交时间线：先落盘，再前进</text>
+  <text x="1060" y="36" fill="#a8a29e" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">pi-durable · commit-before-show</text>
+
+  <!-- ===== Panel 1: 正常路径 ===== -->
+  <rect x="20" y="56" width="1040" height="216" rx="8" fill="#ffffff" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+  <rect x="20" y="56" width="1040" height="34" rx="8" fill="rgba(45,110,60,0.07)"/>
+  <text x="36" y="78" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif">① 正常路径 —— 每个 commit 全有或全无</text>
+  <text x="1044" y="78" fill="#57534e" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">submit(input) → wait() → done</text>
+
+  <!-- commit #1 -->
+  <rect x="40" y="130" width="160" height="96" rx="6" fill="rgba(45,110,60,0.06)" stroke="#2d6e3c" stroke-width="1.2"/>
+  <text x="120" y="150" fill="#2d6e3c" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commit #1</text>
+  <text x="120" y="172" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">pi.user</text>
+  <text x="120" y="190" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">+ 创建 pi.generation 任务</text>
+  <text x="120" y="206" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">同一原子写</text>
+
+  <!-- phase 1 -->
+  <line x1="204" y1="178" x2="326" y2="178" stroke="#57534e" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="265" y="140" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">generation 流式调模型</text>
+  <text x="265" y="154" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">partial ≤100ms 提交到 pi.live</text>
+  <text x="265" y="214" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">事务外执行</text>
+
+  <!-- commit #2 -->
+  <rect x="330" y="130" width="160" height="96" rx="6" fill="rgba(45,110,60,0.06)" stroke="#2d6e3c" stroke-width="1.2"/>
+  <text x="410" y="150" fill="#2d6e3c" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commit #2</text>
+  <text x="410" y="172" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">pi.assistant</text>
+  <text x="410" y="190" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">（含工具调用）</text>
+  <text x="410" y="206" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">+ 创建 pi.tool 任务 ×n</text>
+
+  <!-- phase 2 -->
+  <line x1="494" y1="178" x2="616" y2="178" stroke="#57534e" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="555" y="140" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">tool 任务执行</text>
+  <text x="555" y="154" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">意图已落盘 · 副作用在事务外</text>
+  <text x="555" y="214" fill="#b5523a" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">generation 等待中</text>
+
+  <!-- commit #3 -->
+  <rect x="620" y="130" width="160" height="96" rx="6" fill="rgba(45,110,60,0.06)" stroke="#2d6e3c" stroke-width="1.2"/>
+  <text x="700" y="150" fill="#2d6e3c" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commit #3</text>
+  <text x="700" y="172" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">pi.tool-result</text>
+  <text x="700" y="190" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">×n 落盘</text>
+  <text x="700" y="206" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">唤醒等待中的 generation</text>
+
+  <!-- phase 3 -->
+  <line x1="784" y1="178" x2="876" y2="178" stroke="#57534e" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="830" y="140" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">generation</text>
+  <text x="830" y="154" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">带结果再调模型</text>
+
+  <!-- commit #4 -->
+  <rect x="880" y="130" width="160" height="96" rx="6" fill="rgba(45,110,60,0.06)" stroke="#2d6e3c" stroke-width="1.2"/>
+  <text x="960" y="150" fill="#2d6e3c" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commit #4</text>
+  <text x="960" y="172" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">pi.assistant</text>
+  <text x="960" y="190" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif" text-anchor="middle">（最终回答）</text>
+  <text x="960" y="206" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">submission → done</text>
+
+  <!-- ===== Panel 2: 崩溃路径 ===== -->
+  <rect x="20" y="292" width="1040" height="212" rx="8" fill="#ffffff" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+  <rect x="20" y="292" width="1040" height="34" rx="8" fill="rgba(181,82,58,0.06)"/>
+  <text x="36" y="314" fill="#1c1917" font-size="11" font-weight="600" font-family="'Geist', sans-serif">② 崩溃路径 —— tool 执行到一半 kill -9，重开接着跑</text>
+  <text x="1044" y="314" fill="#57534e" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">effect sandwich：意图已提交 · 效果不确定 · 结果必落盘</text>
+
+  <!-- crash -->
+  <rect x="40" y="372" width="150" height="72" rx="6" fill="rgba(181,82,58,0.10)" stroke="#b5523a" stroke-width="1.4"/>
+  <text x="115" y="402" fill="#b5523a" font-size="12" font-weight="700" font-family="'Geist', sans-serif" text-anchor="middle">💥 进程崩溃</text>
+  <text x="115" y="424" fill="#57534e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">内存状态全部丢失</text>
+
+  <line x1="194" y1="408" x2="246" y2="408" stroke="#57534e" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- reopen -->
+  <rect x="250" y="372" width="180" height="72" rx="6" fill="#ffffff" stroke="#1c1917" stroke-width="1"/>
+  <text x="340" y="396" fill="#1c1917" font-size="10.5" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">重开 · resume()</text>
+  <text x="340" y="416" fill="#57534e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">running 任务回到 pending</text>
+  <text x="340" y="432" fill="#57534e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">调度器从 checkpoint 续跑</text>
+
+  <line x1="434" y1="408" x2="486" y2="408" stroke="#57534e" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- uncertain -->
+  <rect x="490" y="372" width="200" height="72" rx="6" fill="rgba(28,25,23,0.05)" stroke="#1c1917" stroke-width="1"/>
+  <text x="590" y="396" fill="#1c1917" font-size="10.5" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">tool 任务：意图已提交</text>
+  <text x="590" y="416" fill="#57534e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">副作用是否发生？无法区分</text>
+  <text x="590" y="432" fill="#57534e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">已提交的部分输出保留</text>
+
+  <!-- branch arrows -->
+  <line x1="694" y1="392" x2="756" y2="360" stroke="#2d6e3c" stroke-width="1" marker-end="url(#arrow-green)"/>
+  <line x1="694" y1="424" x2="756" y2="452" stroke="#b5523a" stroke-width="1" marker-end="url(#arrow-accent)"/>
+
+  <!-- branch A -->
+  <rect x="760" y="336" width="290" height="48" rx="6" fill="rgba(45,110,60,0.06)" stroke="#2d6e3c" stroke-width="1"/>
+  <text x="770" y="356" fill="#2d6e3c" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace">replay: "safe"（幂等）</text>
+  <text x="770" y="373" fill="#57534e" font-size="9" font-family="'Geist', sans-serif">自动重跑；requestId 保证重放不产生重复效果</text>
+
+  <!-- branch B -->
+  <rect x="760" y="428" width="290" height="48" rx="6" fill="rgba(181,82,58,0.06)" stroke="#b5523a" stroke-width="1"/>
+  <text x="770" y="448" fill="#b5523a" font-size="9.5" font-weight="600" font-family="'Geist Mono', monospace">默认（未声明）</text>
+  <text x="770" y="465" fill="#57534e" font-size="9" font-family="'Geist', sans-serif">给模型 interrupted 错误结果，由模型决定下一步</text>
+
+  <text x="115" y="486" fill="#a8a29e" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">TUI 零恢复代码：只渲染 viewState()</text>
+
+  <!-- ===== 不变式 ===== -->
+  <rect x="20" y="524" width="336" height="92" rx="8" fill="rgba(28,25,23,0.03)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+  <text x="36" y="550" fill="#1c1917" font-size="10.5" font-weight="600" font-family="'Geist', sans-serif">不变式 ① 提交全有或全无</text>
+  <text x="36" y="572" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">条目追加、文档变更、任务创建在同一次</text>
+  <text x="36" y="590" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">原子写里完成，没有中间态</text>
+
+  <rect x="372" y="524" width="336" height="92" rx="8" fill="rgba(28,25,23,0.03)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+  <text x="388" y="550" fill="#1c1917" font-size="10.5" font-weight="600" font-family="'Geist', sans-serif">不变式 ② 提交成功前不发布</text>
+  <text x="388" y="572" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">文档更新只有在存储提交成功后才对</text>
+  <text x="388" y="590" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">订阅者可见</text>
+
+  <rect x="724" y="524" width="336" height="92" rx="8" fill="rgba(28,25,23,0.03)" stroke="rgba(28,25,23,0.20)" stroke-width="1"/>
+  <text x="740" y="550" fill="#1c1917" font-size="10.5" font-weight="600" font-family="'Geist', sans-serif">不变式 ③ 没有易失发布路径</text>
+  <text x="740" y="572" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">所有可见进度都必须持久化：流式 partial 与</text>
+  <text x="740" y="590" fill="#57534e" font-size="9.5" font-family="'Geist', sans-serif">工具输出默认每 100ms 提交一次</text>
+</svg>

@@ -8,12 +8,12 @@ export function ChapterGrid() {
     <section id="chapters" className="relative py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="reveal mb-12">
-          <p className="font-mono text-xs tracking-widest text-emerald-600">10 CHAPTERS</p>
+          <p className="font-mono text-xs tracking-widest text-emerald-600">10 CHAPTERS + 进阶篇</p>
           <h2 className="mt-3 text-3xl font-black tracking-tight text-foreground sm:text-4xl">
             十章<span className="text-gradient">指南</span>
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground">
-            每章一篇精华导读，配原创图解与代码示意。点击卡片进入完整章节。
+            每章一篇精华导读，配原创图解与代码示意。点击卡片进入完整章节；第 11 章为进阶篇，讲 1.0 新引入的实验性 pi-durable。
           </p>
         </div>
 
@@ -22,12 +22,12 @@ export function ChapterGrid() {
           className="gradient-border reveal group mb-8 flex flex-col items-start gap-3 p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:glow-cyan sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <p className="font-mono text-xs tracking-widest text-sky-600">INTERVIEW 30 Q&amp;A</p>
+            <p className="font-mono text-xs tracking-widest text-sky-600">INTERVIEW 33 Q&amp;A</p>
             <h3 className="mt-2 text-lg font-bold text-foreground">
-              AI Agent 面试题：30 问 30 答合集
+              AI Agent 面试题：33 问 33 答合集
             </h3>
             <p className="mt-1.5 text-sm text-muted-foreground">
-              十章的面试问答全部汇总在一页，自测、速查、面试前抱佛脚都好用。
+              正篇十章加进阶篇的面试问答全部汇总在一页，自测、速查、面试前抱佛脚都好用。
             </p>
           </div>
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 text-sm font-bold text-white shadow-soft transition-transform group-hover:translate-x-1">

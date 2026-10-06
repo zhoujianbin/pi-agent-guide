@@ -8,6 +8,7 @@ import ch07 from "../../content/chapters/ch07.md?raw";
 import ch08 from "../../content/chapters/ch08.md?raw";
 import ch09 from "../../content/chapters/ch09.md?raw";
 import ch10 from "../../content/chapters/ch10.md?raw";
+import ch11 from "../../content/chapters/ch11.md?raw";
 
 export interface InterviewItem {
   q: string;
@@ -108,7 +109,7 @@ function toDoc(raw: string, fallbackId: number): ChapterDoc {
   };
 }
 
-const raws = [ch01, ch02, ch03, ch04, ch05, ch06, ch07, ch08, ch09, ch10];
+const raws = [ch01, ch02, ch03, ch04, ch05, ch06, ch07, ch08, ch09, ch10, ch11];
 
 export const chapters: ChapterDoc[] = raws.map((raw, i) => toDoc(raw, i + 1));
 
