@@ -24,10 +24,97 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-10-03";
+export const CHANGELOG_UPDATED = "2026-10-19";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v1.3",
+    date: "2026-10-15",
+    headline: "缓存友好三连：改 thinking、加工具、换模型，都不再轻易打破 prompt 缓存",
+    items: [
+      {
+        text: "GPT-6 会话中途改 thinking 级别现在保留 prompt 缓存（API key 路径）；kimi-coding 切换到 Chat Completions 协议，会话中途加工具也不再让缓存失效——自定义 base URL 覆盖需改成带 /v1",
+        chapters: [8, 4],
+        tag: "Provider",
+      },
+      {
+        text: "切换模型时旧模型的 thinking 块直接丢弃，不再当普通文本发给新模型——新模型不会再把别人的推理当成自己的回答往下写",
+        chapters: [6],
+      },
+      {
+        text: "/share 可以选上传目的地了：sessionShareDestination 设 auto / gist / radius，会话分享不再只有默认通道",
+        chapters: [10],
+      },
+      {
+        text: "恢复会话保留会话期间激活的工具：resume 读回当时的工具集，--tools +name/-name 在其上叠加，而不是被默认值整个替换",
+        chapters: [5, 10],
+      },
+      {
+        text: "工具参数是畸形 JSON 时不再「截断后能解析多少用多少」地静默执行，而是校验失败并把原始参数展示给模型让它重来",
+        chapters: [5],
+      },
+      {
+        text: "--model 在多个 Provider 提供同名模型时优先选有凭据的那个，选不出来就如实报告歧义，不再按目录顺序悄悄挑一个",
+        chapters: [4],
+      },
+    ],
+  },
+  {
+    version: "v1.2",
+    date: "2026-10-12",
+    headline: "配置 Schema 正式发布，before_agent_start 开始覆盖扩展触发的 run（两处 breaking）",
+    items: [
+      {
+        text: "配置文件 Schema 发布：settings.json / models.json / keybindings / themes 都能写 $schema 获得编辑器校验与补全；主题 schema 迁至 pi.dev/schemas 且启动加载也走同样的校验——引用旧地址的主题要迁移",
+        tag: "工程",
+        breaking: true,
+      },
+      {
+        text: "before_agent_start 对 pi.sendMessage(triggerTurn: true) 触发的 run 也会触发：事件变成按 messageType 区分的 union，run 启动期间会话就算 busy——只关心用户 prompt 的 handler 必须检查 event.messageType === \"user\"",
+        chapters: [7],
+        tag: "扩展",
+        breaking: true,
+      },
+      {
+        text: "OpenRouter 按 key 列模型：只列出这把 key 可用的模型，附该 key 的上下文大小、输出上限与价格，列表落盘离线可用",
+        tag: "Provider",
+      },
+      {
+        text: "工具可以声明 reachesTools：codemode、tool_search 这类「能触达其他工具的工具」明说一次调用可能够到谁，MCP 扩展借此只等需要的服务器；codemode 的工具声明还会显示 integer、min/max、default 等输入约束",
+        chapters: [5],
+      },
+      {
+        text: "未发布的实验性 server / client / plugin 栈整体移除，pi-client / pi-protocol / pi-server 停止发布，chord 依赖移除——从未进入正式包，正常用户无感",
+        tag: "工程",
+      },
+    ],
+  },
+  {
+    version: "v1.1",
+    date: "2026-10-07",
+    headline: "OSC 7501 让终端看见 Pi 在忙什么，--tools 学会增量加减",
+    items: [
+      {
+        text: "OSC 7501 程序状态上报：支持的终端和 agent 仪表盘能看到 Pi 是工作中、被对话框/登录卡住、完成还是失败；agent_settled 事件新增 aborted 字段区分「被取消」和「跑完了」",
+        chapters: [7],
+        tag: "TUI",
+      },
+      {
+        text: "--tools 支持 +name / -name 增量写法：pi -t +codemode,-write 在默认工具集上加减，不再整个替换——第 5 章工具白名单的日常用法顺手了",
+        chapters: [5],
+      },
+      {
+        text: "Claude Haiku 5.5 上线（adaptive thinking 到 xhigh/max）；GPT-6 Luna 经 Decisions API 当分类器，models.classify() 能吃图片；llama.cpp 0.6+ 原生决策模型直接当分类器",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "托管安装的 pi update 只保留新旧两个版本，不再无限堆积；npm 全局安装会收到迁移到 pi.dev 托管安装的建议（依赖全部锁定）",
+        tag: "工程",
+      },
+    ],
+  },
   {
     version: "v1.0",
     date: "2026-10-01",
@@ -57,6 +144,23 @@ export const changelogVersions: ChangelogVersion[] = [
       {
         text: "quietStartup: \"header\" 只保留版本号和按键提示的精简启动头",
         tag: "TUI",
+      },
+      {
+        text: "MCP 精细管控：.pi/mcp.json 可以按项目覆盖用户级服务器的启停与曝光（v1.0.1）；--tools / --exclude-tools 支持 * 通配（如 'mcp__radius__*' 只留一个服务器的工具），--no-mcp 单次运行关掉 MCP（v1.0.4）",
+        chapters: [5],
+      },
+      {
+        text: "pi.registerToolRenderer()：给任何工具注册渲染器，包括还没注册的——恢复会话里的 MCP 工具调用也能画得好看（v1.0.1）",
+        tag: "扩展",
+      },
+      {
+        text: "Azure Provider 从 azure-openai-responses 改名 azure：auth.json、models.json、settings.json 里的键都要跟着改，旧会话恢复时回退到其他模型（v1.0.3）",
+        tag: "Provider",
+        breaking: true,
+      },
+      {
+        text: "samplingParamsByThinkingLevel：按 thinking 级别给 OpenAI 兼容 API 单独配 temperature / top_p（v1.0.2）；Anthropic 会话中途改工具定义改为内联，保住 prompt 缓存（v1.0.1）",
+        chapters: [4, 8],
       },
     ],
   },
