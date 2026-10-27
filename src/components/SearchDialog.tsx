@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
-import { Search, FileText, CircleHelp, SquareTerminal, CornerDownLeft, Package, FlaskConical, Radar } from "lucide-react";
+import { Search, FileText, CircleHelp, SquareTerminal, CornerDownLeft, Package, FlaskConical, Radar, Gift } from "lucide-react";
 import { searchDocs, type SearchKind, type SearchResult } from "@/lib/search";
 
 const KIND_META: Record<SearchKind, { label: string; cls: string; icon: ReactNode }> = {
@@ -34,11 +34,17 @@ const KIND_META: Record<SearchKind, { label: string; cls: string; icon: ReactNod
     cls: "bg-teal-50 text-teal-700 border-teal-200/70",
     icon: <Radar size={11} />,
   },
+  guide: {
+    label: "模型选型",
+    cls: "bg-amber-50 text-amber-700 border-amber-200/70",
+    icon: <Gift size={11} />,
+  },
 };
 
 const HOT_ENTRIES = [
   { to: "/#chapters", label: "十章指南目录", desc: "从三层架构到会话树，逐章拆解" },
   { to: "/lab/", label: "实战实验室", desc: "6 关从零写一个 mini Agent" },
+  { to: "/model-guide/", label: "国产模型选型指南", desc: "官方价格核验与邀请优惠" },
   { to: "/changelog/", label: "版本雷达", desc: "每个版本更新了啥，对应哪一章" },
   { to: "/questions/", label: "面试 33 题", desc: "33 问 33 答，读完自测" },
   { to: "/cheatsheet/", label: "命令速查表", desc: "斜杠命令 / CLI / 快捷键" },

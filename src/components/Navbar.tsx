@@ -9,6 +9,7 @@ const links = [
   { href: "/#path", label: "学习路径" },
   { href: "/#chapters", label: "十章指南" },
   { href: "/lab/", label: "实战" },
+  { href: "/model-guide/", label: "模型选型" },
   { href: "/changelog/", label: "版本雷达" },
   { href: "/questions/", label: "面试33题" },
   { href: "/cheatsheet/", label: "速查表" },
@@ -79,7 +80,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           {links.map((l) => (
             <a
               key={l.href}
@@ -114,7 +115,7 @@ export function Navbar() {
         </div>
 
         <button
-          className="md:hidden text-muted-foreground"
+          className="xl:hidden text-muted-foreground"
           onClick={() => setOpen(!open)}
           aria-label="菜单"
         >
@@ -123,7 +124,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-border/70 bg-white/95 backdrop-blur-xl md:hidden">
+        <div className="border-t border-border/70 bg-white/95 backdrop-blur-xl xl:hidden">
           <div className="flex flex-col gap-1 px-4 py-3">
             <button
               onClick={() => {

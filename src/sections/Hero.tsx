@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { AgentLoopDiagram } from "@/components/AgentLoopDiagram";
-import { ArrowDown, Github } from "lucide-react";
+import { ArrowDown, FlaskConical, Gift, Github } from "lucide-react";
+import { Link } from "react-router";
 
 export function Hero() {
   return (
@@ -26,10 +27,11 @@ export function Hero() {
             而是真正能上线的 Agent 工程参考实现。十章导读，
             带你拆解 Agent Loop、工具管道、上下文工程与会话树的每一处设计权衡。
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button
               size="lg"
-              className="glow-cyan bg-gradient-to-r from-emerald-500 to-sky-500 font-semibold text-white hover:opacity-90"
+              variant="outline"
+              className="border-border bg-white/70 font-semibold hover:border-emerald-300 hover:text-emerald-600"
               onClick={() => document.getElementById("chapters")?.scrollIntoView({ behavior: "smooth" })}
             >
               开始学习
@@ -37,16 +39,36 @@ export function Hero() {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="border-border bg-white/70 hover:border-emerald-300 hover:text-emerald-600"
+              className="glow-cyan bg-gradient-to-r from-emerald-500 to-sky-500 font-semibold text-white hover:opacity-90"
               asChild
             >
-              <a href="https://github.com/earendil-works/pi" target="_blank" rel="noreferrer">
-                <Github className="mr-1.5" size={17} />
-                Pi 官方仓库
-              </a>
+              <Link to="/lab/">
+                <FlaskConical className="mr-1.5" size={17} />
+                实战闯关
+              </Link>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-amber-300 bg-amber-50/90 font-semibold text-amber-800 hover:border-amber-400 hover:bg-amber-100 hover:text-amber-900"
+              asChild
+            >
+              <Link to="/model-guide/">
+                <Gift className="mr-1.5" size={17} />
+                国产模型选型指南
+                <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black text-amber-950">含羊毛</span>
+              </Link>
             </Button>
           </div>
+          <a
+            href="https://github.com/earendil-works/pi"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-emerald-600"
+          >
+            <Github size={14} />
+            Pi 官方仓库
+          </a>
           <div className="mt-10 flex gap-8 font-mono text-xs text-muted-foreground">
             <span><span className="font-bold text-emerald-600">4</span> 核心包</span>
             <span><span className="font-bold text-emerald-600">10</span> 章拆解</span>

@@ -8,8 +8,9 @@ import { flattenCheatsheet } from "@/lib/cheatsheet";
 import { flattenEcosystem } from "@/lib/ecosystem";
 import { flattenChangelog } from "@/lib/changelog";
 import { labs } from "@/lib/lab";
+import { modelGuideSearchText } from "@/lib/model-guide";
 
-export type SearchKind = "chapter" | "question" | "cheat" | "eco" | "lab" | "log";
+export type SearchKind = "chapter" | "question" | "cheat" | "eco" | "lab" | "log" | "guide";
 
 export interface SearchEntry {
   kind: SearchKind;
@@ -130,6 +131,14 @@ function buildIndex(): SearchEntry[] {
       });
     }
   }
+
+  entries.push({
+    kind: "guide",
+    title: "国产模型选型指南（含羊毛）",
+    crumb: "模型选型 · 官方价格与邀请优惠",
+    text: modelGuideSearchText,
+    to: "/model-guide/",
+  });
 
   return entries;
 }

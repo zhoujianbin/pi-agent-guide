@@ -43,6 +43,9 @@ const LAB_DESCRIPTION =
 const CHANGELOG_TITLE = "Pi 版本雷达：每个版本更新了啥，对应指南哪一章 | PI agent学习指南";
 const CHANGELOG_DESCRIPTION =
   "追踪 Pi（earendil-works/pi）官方版本更新：v0.73 至最新版的中文人话解读，每条变更标注对应指南章节——压缩重试、全屏 TUI、远程会话、约束采样、项目信任，读完指南也能跟上迭代。";
+const MODEL_GUIDE_TITLE = "国产模型选型指南（含羊毛）：Coding Plan 怎么选 | PI agent学习指南";
+const MODEL_GUIDE_DESCRIPTION =
+  "按预算、使用频率和工具习惯选择国产 AI 编程模型：方舟、MiniMax、GLM、Kimi、阿里百炼、DeepSeek 与硅基流动，附官方价格核验、续费避坑和邀请优惠。";
 const LAB_DIR = path.join(ROOT, "content", "lab");
 
 /* ---------- frontmatter 轻量解析（与 src/lib/chapters.ts 逻辑一致） ---------- */
@@ -312,6 +315,13 @@ async function main() {
       outDir: "changelog",
       jsonLd: () => webpageJsonLd(CHANGELOG_TITLE, CHANGELOG_DESCRIPTION, "/changelog/"),
     },
+    "/model-guide/": {
+      title: MODEL_GUIDE_TITLE,
+      description: MODEL_GUIDE_DESCRIPTION,
+      ready: "#root #model-guide-root",
+      outDir: "model-guide",
+      jsonLd: () => webpageJsonLd(MODEL_GUIDE_TITLE, MODEL_GUIDE_DESCRIPTION, "/model-guide/"),
+    },
   };
 
   const routes = [
@@ -402,6 +412,7 @@ async function main() {
     `  <url><loc>${SITE_URL}/ecosystem/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/lab/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     `  <url><loc>${SITE_URL}/changelog/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+    `  <url><loc>${SITE_URL}/model-guide/</loc><lastmod>${buildDate}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
     ...chapters.map(
       (c) =>
         `  <url><loc>${SITE_URL}/chapter/${c.id}/</loc><lastmod>${buildDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
