@@ -24,10 +24,42 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-10-19";
+export const CHANGELOG_UPDATED = "2026-11-02";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v1.4",
+    date: "2026-10-21",
+    headline: "压缩摘要不再被输出上限憋死，codemode 学会排队，分类器能看图",
+    items: [
+      {
+        text: "压缩与分支摘要改用模型自身的输出上限，不再被固定输出上限憋死（长 reasoning 曾把摘要撑爆）；generateSummary() 的 reserveTokens 参数失效，compaction.reserveTokens 只管何时触发压缩",
+        chapters: [9],
+      },
+      {
+        text: "codemode 学会等空闲 worker：并行脚本和进程内子代理排队（最多 60s）而不是直接失败，PI_CODEMODE_MAX_WORKERS 可调高 2 个 worker 的默认上限",
+        chapters: [5],
+      },
+      {
+        text: "分类器吃图片：models.classify() 接受 images（TypeSafe Jev、Cloudflare Clef，经 typesafe / cloudflare-workers-ai / OpenRouter），Provider 级 compat 也覆盖分类器",
+        chapters: [4],
+      },
+      {
+        text: "before_provider_headers 不再看到 OpenRouter / NVIDIA NIM / OpenCode 的归属头：归属头改由 pi-ai 客户端身份统一发出，返回 null 仍可移除",
+        tag: "扩展",
+      },
+      {
+        text: "Models Configuration 参考文档上线：models.json 全部 provider / 模型 / 覆盖 / compat 字段由 schema 生成",
+        tag: "工程",
+      },
+      {
+        text: "修复两枚会话地雷：输出上限截断恢复后留下「孤儿工具结果」导致后续请求全被 Provider 拒绝；恢复会话/分支导航后扩展工具不激活（现在除非 defaultActive: false 否则激活）",
+        chapters: [10],
+        tag: "扩展",
+      },
+    ],
+  },
   {
     version: "v1.3",
     date: "2026-10-15",
