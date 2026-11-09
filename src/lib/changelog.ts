@@ -24,10 +24,44 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-11-02";
+export const CHANGELOG_UPDATED = "2026-11-09";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v1.5",
+    date: "2026-11-02",
+    headline: "工具参数校验换引擎（breaking），流式渲染大提速，tool_search 终于懂中文",
+    items: [
+      {
+        text: "工具参数校验从 TypeBox 换到 pi-schema：Type.Refine()、Type.BigInt()、codecs 等超出 JSON Schema 的特性对工具参数不再生效；普通 JSON Schema 工具（含 MCP）反而获得同样的类型强转，模型看到的校验失败信息格式也变了——写扩展的要注意",
+        chapters: [5],
+        tag: "扩展",
+        breaking: true,
+      },
+      {
+        text: "GPT-6.1 Terra 上线：OpenAI / Azure / Codex 三家同步，支持工具搜索、会话中途改 thinking 级别和 thinking off，Codex 给到 500K 上下文；OpenAI 默认模型也从 gpt-5.5 换成 gpt-6.1-sol",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "流式渲染大提速：大工具调用改为增量解析（不再每个 delta 重解析全部参数），代码高亮和 Markdown 渲染结果跨帧复用——长输出的 CPU 和内存占用大幅下降",
+        tag: "TUI",
+      },
+      {
+        text: "扩展包更新后有 changelog 可看：从 package.json 的 pi.changelogPath 或包根 CHANGELOG.md 读取，下次启动集中展示「Extension Updates」，collapseChangelog 可压缩成一行",
+        tag: "扩展",
+      },
+      {
+        text: "tool_search 终于懂中文：非 ASCII 查询不再空手而归，「搜索记录」这类无空格文本会正确分词；排序也修正了——名字命中查询词的工具不再被只在描述里提到名字的工具压在底下",
+        chapters: [5],
+      },
+      {
+        text: "安全修复一串：MCP OAuth 拒绝非 http/https 授权端点（恶意服务器塞 file: URL 不再被打开）、登录对话框不再打开非 web URL、终端标题控制字符注入封堵、glob 放大攻击防 DoS",
+        tag: "安全",
+      },
+    ],
+  },
   {
     version: "v1.4",
     date: "2026-10-21",
