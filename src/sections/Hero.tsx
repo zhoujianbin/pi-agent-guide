@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { AgentLoopDiagram } from "@/components/AgentLoopDiagram";
-import { ArrowDown, FlaskConical, Gift, Github } from "lucide-react";
+import { ArrowDown, FlaskConical, Github } from "lucide-react";
 import { Link } from "react-router";
 
 export function Hero() {
@@ -45,18 +45,6 @@ export function Hero() {
               <Link to="/lab/">
                 <FlaskConical className="mr-1.5" size={17} />
                 实战闯关
-              </Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-amber-300 bg-amber-50/90 font-semibold text-amber-800 hover:border-amber-400 hover:bg-amber-100 hover:text-amber-900"
-              asChild
-            >
-              <Link to="/model-guide/">
-                <Gift className="mr-1.5" size={17} />
-                国产模型选型指南
-                <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black text-amber-950">含羊毛</span>
               </Link>
             </Button>
           </div>
