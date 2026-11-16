@@ -24,14 +24,14 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-11-09";
+export const CHANGELOG_UPDATED = "2026-11-16";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
   {
     version: "v1.5",
     date: "2026-11-02",
-    headline: "工具参数校验换引擎（breaking），流式渲染大提速，tool_search 终于懂中文",
+    headline: "工具参数校验换引擎（breaking），流式渲染大提速，tool_search 终于懂中文；v1.5.1 带来 Anthropic 消息线程与空闲缓存保温",
     items: [
       {
         text: "工具参数校验从 TypeBox 换到 pi-schema：Type.Refine()、Type.BigInt()、codecs 等超出 JSON Schema 的特性对工具参数不再生效；普通 JSON Schema 工具（含 MCP）反而获得同样的类型强转，模型看到的校验失败信息格式也变了——写扩展的要注意",
@@ -59,6 +59,35 @@ export const changelogVersions: ChangelogVersion[] = [
       {
         text: "安全修复一串：MCP OAuth 拒绝非 http/https 授权端点（恶意服务器塞 file: URL 不再被打开）、登录对话框不再打开非 web URL、终端标题控制字符注入封堵、glob 放大攻击防 DoS",
         tag: "安全",
+      },
+      {
+        text: "grep 工具的 context 行改由 ripgrep 直接提供：大文件不再读爆内存，UTF-16 和孤立 CR 也顺带修好；自定义 GrepOperations.readFile 不再为 context 行调用（字段保留但废弃），远程文件系统要改为 override grep 的 execute()（v1.5.1）",
+        chapters: [5],
+        tag: "扩展",
+        breaking: true,
+      },
+      {
+        text: "OpenAI 兼容端点在工具全禁用时不再发送空 \"tools\": []（修掉 vLLM 0.20+ 的 400）；代理若要求历史有工具调用就必须带 tools，在 models.json 设 compat.requiresToolsWithToolHistory: true（v1.5.1）",
+        chapters: [4],
+        tag: "Provider",
+        breaking: true,
+      },
+      {
+        text: "Anthropic 消息线程：每次请求只发新消息、服务器接续对话，上下文变了（压缩、工具列表变化）自动回退全量请求；compat.supportsMessageThreads 可为转发网关开关——缓存经济学的又一杠杆（v1.5.1）",
+        chapters: [4, 8],
+      },
+      {
+        text: "缓存保温扩展到空闲时段：cacheWarming 默认从 \"streaming\" 改为 \"idle\"，run 间隙最多保温 30 分钟、只在划算时刷新；连续保温合并成一行累计成本（v1.5.1）",
+        chapters: [8],
+      },
+      {
+        text: "新模型一批：Claude Fable 5.2 上线（1M 上下文，拒答请求由 Opus 5 服务端兜底），anthropic 默认模型升到 Opus 5.5，Moonshot 系默认从 Kimi K2.6 换到 K2.7 Code；Qwen Token Plan 新增中国端点 provider；GitHub Copilot 的 Microsoft-Decision-1 可当分类器（v1.5.1）",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "会话原目录被删或改名后可以 Fork 到当前目录：启动、/resume、/import 都会给 Continue / Fork / Cancel 三选，Fork 成新会话之后 resume 不再每次追问（v1.5.2）",
+        chapters: [10],
       },
     ],
   },
