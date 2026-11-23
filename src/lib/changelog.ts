@@ -24,10 +24,44 @@ export interface ChangelogVersion {
   items: ChangelogItem[];
 }
 
-export const CHANGELOG_UPDATED = "2026-11-16";
+export const CHANGELOG_UPDATED = "2026-11-23";
 export const CHANGELOG_SOURCE = "https://github.com/earendil-works/pi/releases";
 
 export const changelogVersions: ChangelogVersion[] = [
+  {
+    version: "v1.6",
+    date: "2026-11-20",
+    headline: "GPT-6.2 双模型上线并成为默认，扩展 render 输出改只读（breaking），find 路径模式对齐 grep",
+    items: [
+      {
+        text: "GPT-6.2 Astra / Sol 上线 openai / azure / openai-codex 三家，Sol 成为三家共同默认（价格不变）；两模型都拒绝 thinking off（不接受 none/minimal effort），Azure 给到 1.05M 上下文",
+        chapters: [4],
+        tag: "Provider",
+      },
+      {
+        text: "扩展组件 render() 现在返回 readonly string[]：Container 在子组件不变时复用缓存数组，原地修改渲染输出（包括 Container 子类里 super.render()）的扩展必须先复制——这是全屏长会话滚动不再吃满一个 CPU 核的同一次重构",
+        tag: "扩展",
+        breaking: true,
+      },
+      {
+        text: "find 工具的路径模式与 grep 对齐：相对搜索目录匹配，src/*.ts 不再误中 pkg/src/a.ts，任意深度要写 **/src/*.ts；不带 / 的模式仍按文件名全深度匹配",
+        chapters: [5],
+      },
+      {
+        text: "Qwen Token Plan 迁移到新网关（qwencloudapi / qianwenaiapi，旧 aliyuncs 域名仍可用），qwen-token-plan 改名 Team；新增 qwen4-max-preview、deepseek-v4.1-flash，key 变量可按 Team/Individual 分设",
+        tag: "Provider",
+      },
+      {
+        text: "缓存可见性补全：OpenAI 丢弃 reasoning items 时转录给出提示（如压缩后的 prefix_mismatch，showCacheMissNotices 开启时显示）；Codex 上改 thinking 级别不再让 prompt 缓存失效、GPT-6.2 系统提示缓存命中修复",
+        chapters: [8],
+      },
+      {
+        text: "RPC / SDK 会话替换修复一批：new_session / switch_session / fork 不再重复跑扩展的 session_start 与 resources_discover；扩展 pi.events handler 抛错改为规范上报（聊天 / extension_error / Extension error），不再 console.error 糊在 TUI 上",
+        chapters: [7],
+        tag: "扩展",
+      },
+    ],
+  },
   {
     version: "v1.5",
     date: "2026-11-02",
