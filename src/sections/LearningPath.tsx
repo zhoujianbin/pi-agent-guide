@@ -26,7 +26,7 @@ const stages = [
     icon: InfinityIcon,
     step: "阶段 ④",
     range: "第 8 – 10 章",
-    title: "长生对话的工程问题",
+    title: "长对话的工程挑战",
     desc: "上下文工程、压缩算法与会话树——让 Agent 连续工作几小时也不丢记忆。",
   },
 ];
